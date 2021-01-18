@@ -1,0 +1,25 @@
+{
+  "name": "mqtt-cutie",
+  "version": "0.1.0",
+  "description": "mqtt backend & frontend",
+  "main": "index.js",
+  "scripts": {
+    "server": "npm start --prefix backend",
+    "client": "npm start --prefix client",
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ec965/MQTT-cutie.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ec965/MQTT-cutie/issues"
+  },
+  "homepage": "https://github.com/ec965/MQTT-cutie#readme",
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.7"
+  }
+}

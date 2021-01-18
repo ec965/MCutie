@@ -1,10 +1,10 @@
 {
-  "name": "js_server",
-  "version": "1.0.0",
+  "name": "backend",
+  "version": "0.1.0",
   "description": "mqtt express server",
   "main": "src/index.js",
   "scripts": {
-    "test": "node src/index.js"
+    "start": "nodemon app.js --inspect"
   },
   "author": "ec965",
   "license": "ISC",
@@ -15,5 +15,8 @@
     "pino": "^6.11.0",
     "pino-pretty": "^4.3.0",
     "sqlite3": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }

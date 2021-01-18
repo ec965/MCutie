@@ -11,14 +11,14 @@ const logger = pino({
     formatters
 });
 
-const util = require('./util'); // isFloat and isInt utility
+const util = require('./src/util'); // isFloat and isInt utility
 
 const express = require('express'); // express 
 const cors = require('cors');
 const PORT = 5000;
 
 var sqlite3 = require('sqlite3').verbose(); // sqlite3 db
-const db = require("./db"); // db query wrappers
+const db = require("./src/db"); // db query wrappers
 
 var mqtt = require('mqtt'); // mqtt
 const Broker = 'mqtt://localhost:1883';
