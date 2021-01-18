@@ -1,0 +1,19 @@
+{
+  "name": "js_server",
+  "version": "1.0.0",
+  "description": "mqtt express server",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js"
+  },
+  "author": "ec965",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mqtt": "^4.2.6",
+    "pino": "^6.11.0",
+    "pino-pretty": "^4.3.0",
+    "sqlite3": "^5.0.1"
+  }
+}
