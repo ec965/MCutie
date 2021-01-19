@@ -1,5 +1,5 @@
 {
-  "name": "mqtt-cutie",
+  "name": "mcutie",
   "version": "0.1.0",
   "description": "mqtt backend & frontend",
   "main": "index.js",

@@ -1,11 +1,11 @@
-# MQTT Server and Client
-MQTT0-cutie provides a web client to interface with MQTT sensors.
+# MQTT Server API and Client
+MCutie provides a web client and API to interface with MQTT devices.
+
+MCutie should run concurrently with an MQTT broker such as mosquitto.
 
 ## Backend
 * Express.js
 * SQLite3
-* MQTT.js
 
 ## Frontend
-* React.js (create-react-app)
-* Recharts
+* React.js
