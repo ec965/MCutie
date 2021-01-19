@@ -1,35 +1,31 @@
 const express = require("express");
-const db = require("./db");
+const db = require("./db_orm");
 const router = express.Router();
 
-// get all unique mqtt topics in the db
+// get all mqtt topics in the db with subscribed status
 router.get("/topics", (req, res) => {
-  db.select_topics((err, rows) => {
-    if (err) {
-      logger.warn("[DB] Error selecting topics");
-    } else {
-      var topics = [];
-      for (r of rows) {
-        topics.push(r.topic);
-      }
-      res.send(topics);
-    }
-  });
+  db.list_topics()
+    .then((topics) => res.status(200).send(topics))
+    .catch((e) => logger.warn("[DB] Error getting topics:", e));
+});
+
+// get all subscribed topics
+router.get("/subscriptions", (req, res) => {
+  db.list_subscriptions()
+    .then((topics) => res.status(200).send(topics))
+    .catch((e) => logger.warn("[DB] Error getting subscriptions: ",e));
 });
 
 // send mqtt data for topic
 router.get("/", (req, res) => {
-  if (req.query.t) {
-    var topic = req.query.t;
-    db.select_all(topic, (err, rows) => {
-      if (err) {
-        logger.warn("[DB] Error selecting rows for topic: " + topic);
-      } else {
-        res.send(rows);
-      }
-    });
-  } else {
-    res.end("No topic query parameter found.");
+  if (req.query.topic) {
+    db.list_messages(req.query.topic)
+      .then((msgs) => res.status(200).send(msgs))
+      .catch((e) => {
+        logger.warn(`[DB] Error getting messages for ${req.query.topic}: ${e}`);
+        res.status(400).send({msg: "Topic not found"});
+      });
+
   }
 });
 
