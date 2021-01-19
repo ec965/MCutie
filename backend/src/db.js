@@ -1,7 +1,10 @@
+const sqlite3 = require('sqlite3').verbose(); // sqlite3 client
+const client = new sqlite3.Database('mqtt.db');
+
 // create the table that mqtt data will go in
-const create_table = (db) => {
-    db.serialize(() => {
-        db.run(
+const create_table = () => {
+    client.serialize(() => {
+        client.run(
             `CREATE TABLE IF NOT EXISTS mqtt_log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 timestamp INTEGER,
@@ -9,13 +12,12 @@ const create_table = (db) => {
                 payload TEXT NOT NULL
             );`
         );
-        
     });
 }
 
-// insert mqtt messages into the db
-const insert_mqtt = (db, timestamp, topic, payload) => {
-    var stmt = db.prepare(
+// insert mqtt messages into the client
+const insert_mqtt = (timestamp, topic, payload) => {
+    var stmt = client.prepare(
         `INSERT INTO mqtt_log (timestamp, topic, payload)
         VALUES (?, ?, ?);`
     );
@@ -24,8 +26,8 @@ const insert_mqtt = (db, timestamp, topic, payload) => {
 }
 
 // select a topic and return all it's rows to the callback function
-const select_all = (db, topic, callback) => {
-    var stmt = db.prepare(
+const select_all = (topic, callback) => {
+    var stmt = client.prepare(
         `SELECT timestamp, payload FROM mqtt_log WHERE topic LIKE ?;`
     );
     stmt.all(
@@ -39,8 +41,8 @@ const select_all = (db, topic, callback) => {
 // select the last row's payload in a topic query
 // `row` will be in the format:
 // row = {payload: _ };
-const select_last = (db, topic, callback) => {
-    var stmt = db.prepare(
+const select_last = (topic, callback) => {
+    var stmt = client.prepare(
         "SELECT payload FROM mqtt_log WHERE topic LIKE ? ORDER BY id DESC LIMIT 1;"
     );
     stmt.get(
@@ -52,15 +54,12 @@ const select_last = (db, topic, callback) => {
 }
 
 // select a list of distinct topics
-const select_topics = (db, callback) => {
-    db.all("SELECT DISTINCT topic FROM mqtt_log",
+const select_topics = (callback) => {
+    client.all("SELECT DISTINCT topic FROM mqtt_log",
         (err, rows) => {
             callback(err, rows);
         }
     );
 }
 
-
-
-
-module.exports = {create_table, insert_mqtt, select_all, select_last, select_topics};
+module.exports = {create_table, insert_mqtt, select_all, select_last, select_topics, client};
