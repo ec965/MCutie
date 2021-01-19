@@ -7,7 +7,7 @@ const create_table = () => {
         client.run(
             `CREATE TABLE IF NOT EXISTS mqtt_log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp INTEGER,
+                timestamp TIMESTAMP DEFAULT (strftime('%s', 'now')),
                 topic TEXT NOT NULL,
                 payload TEXT NOT NULL
             );`
@@ -16,12 +16,12 @@ const create_table = () => {
 }
 
 // insert mqtt messages into the client
-const insert_mqtt = (timestamp, topic, payload) => {
+const insert_mqtt = (topic, payload) => {
     var stmt = client.prepare(
-        `INSERT INTO mqtt_log (timestamp, topic, payload)
-        VALUES (?, ?, ?);`
+        `INSERT INTO mqtt_log (topic, payload)
+        VALUES (?, ?);`
     );
-    stmt.run(timestamp, topic, payload);
+    stmt.run(topic, payload);
     stmt.finalize();
 }
 

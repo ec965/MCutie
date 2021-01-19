@@ -1,10 +1,6 @@
 const mqtt = require('mqtt'); // mqtt
+const util = require('./util');
 const db = require('./db');
-const Broker = 'mqtt://localhost:1883';
-const Subscriptions = [ "esp32-temp/out/#" , "esp32-temp/in/#"];
-const FloatResoltuion = 0.1;
-const IntResolution = 1;
-
 const pino = require('pino');
 const formatters = {
     bindings (bindings) {
@@ -17,12 +13,17 @@ const logger = pino({
     formatters
 });
 
-// connect mqtt client
+const FloatResoltuion = 0.1;
+const IntResolution = 1;
+const Broker = 'mqtt://localhost:1883';
+const Subscriptions = [ "esp32-temp/out/#" , "esp32-temp/in/#"];
 var connopts = {
     clientId: 'mqtt_js_test',
     username: 'test',
     password: 'test123'
 }
+
+// connect mqtt client
 const client = mqtt.connect(Broker, connopts);
 // bind callbacks for mqtt
 client.on('connect', () => {
@@ -34,8 +35,9 @@ client.on('connect', () => {
 });
 
 client.on('reconnect', () => logger.info("[MQTT] Disconnected, attempting to reconnect"));
+client.on('message', (topic, message) => on_message(topic, message)); 
 
-client.on('message', (topic, message) => {
+const on_message = (topic, message) =>{
     topic = String(topic);
     message = String(message); // messages can come in as bytes, but we want chars
     logger.debug("[MQTT] RX: " + topic + ": " + message);
@@ -71,10 +73,10 @@ client.on('message', (topic, message) => {
 
             if (push_to_db){
                 logger.debug("[MQTT/DB] Saving last mqtt msg to db.");
-                db.insert_mqtt( Date.now(), topic, message);
+                db.insert_mqtt(topic, message);
             }
         }
     });
-}); 
+}
 
 module.exports = {client};

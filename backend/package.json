@@ -15,6 +15,7 @@
     "mqtt": "^4.2.6",
     "pino": "^6.11.0",
     "pino-pretty": "^4.3.0",
+    "sequelize": "^6.4.0",
     "sqlite3": "^5.0.1"
   },
   "devDependencies": {
