@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("./db_orm");
+const db = require("../db/index");
 const router = express.Router();
 
 // get all mqtt topics in the db with subscribed status
@@ -13,7 +13,7 @@ router.get("/topics", (req, res) => {
 router.get("/subscriptions", (req, res) => {
   db.list_subscriptions()
     .then((topics) => res.status(200).send(topics))
-    .catch((e) => logger.warn("[DB] Error getting subscriptions: ",e));
+    .catch((e) => logger.warn("[DB] Error getting subscriptions: ", e));
 });
 
 // send mqtt data for topic
@@ -23,9 +23,8 @@ router.get("/", (req, res) => {
       .then((msgs) => res.status(200).send(msgs))
       .catch((e) => {
         logger.warn(`[DB] Error getting messages for ${req.query.topic}: ${e}`);
-        res.status(400).send({msg: "Topic not found"});
+        res.status(400).send({ msg: "Topic not found" });
       });
-
   }
 });
 

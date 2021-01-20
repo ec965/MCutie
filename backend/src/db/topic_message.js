@@ -37,6 +37,7 @@ MqttTopic.hasMany(MqttMsg, {
 });
 MqttMsg.belongsTo(MqttTopic);
 
+// SEE IF THIS CAN BE A HOOK
 // returns the id of the given topic_name
 // if topic doesn't exist, then create a new topic
 const get_topic_id = async (topic_name) => {
@@ -46,8 +47,6 @@ const get_topic_id = async (topic_name) => {
       topic: topic_name,
     },
   });
-  console.log("TOPIC ID: ",JSON.stringify(topic_id, null, 2));
-
   if (topic_id === null){
     topic_id = await MqttTopic.create({
       topic: topic_name
