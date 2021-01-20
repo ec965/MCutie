@@ -11,7 +11,7 @@ const on_message = (topic, message) => {
   message = String(message); // messages can come in as bytes, but we want chars
   logger.debug("[MQTT] RX: " + topic + ": " + message);
 
-  db.mqtt_msg.get_last_message(topic)
+  db.mqtt_msg.get_last_msg(topic)
   .then((last) => {
     if (last !== null) {
       // don't push data to db if it doesn't pass the resolution test
@@ -22,7 +22,7 @@ const on_message = (topic, message) => {
     }
 
     logger.debug("[DB] Saving last mqtt msg to db.");
-    db.mqtt_msg.add_new_msg(topic, message)
+    db.mqtt_msg.add_msg(topic, message)
     .catch((e) => logger.error("[DB] Error saving msg to db:", e));
 
   })

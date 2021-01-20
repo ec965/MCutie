@@ -72,6 +72,24 @@ Returned JSON where time is in unix time:
 ```
 
 ## POST
-todo:
-* send MQTT messages
-* subscribe to new topics
+
+### `/mqtt/s`
+Subscribe to a new topic.
+Request body should be in the format:
+```json
+{
+    "topic" : "<TOPIC>",
+    "qos" : "<QOS>"
+}
+```
+
+## DELETE
+
+### `/mqtt/s`
+Unsubscribe from a topic.
+Request body should be int he format:
+```json
+{
+    "topic" : "<TOPIC>"
+}
+```

@@ -59,7 +59,7 @@ const get_topic_id = async (topic_name) => {
 };
 
 // create a new messgae in the db
-const add_new_msg = async (topic, message) => {
+const add_msg= async (topic, message) => {
   var msg = await MqttMsg.create({
     mqttTopicId: await get_topic_id(topic),
     message: message,
@@ -75,7 +75,7 @@ const list_topics = async () => {
 };
 
 // list messages for a given topic
-const list_messages = async (topic) => {
+const list_msgs = async (topic) => {
   var msgs = await MqttTopic.findAll({
     where: {
       topic: topic
@@ -85,7 +85,7 @@ const list_messages = async (topic) => {
   return msgs;
 };
 
-const get_last_message = async (topic) => {
+const get_last_msg = async (topic) => {
   var msg = await MqttMsg.findOne({
     attributes: ["time", "message"],
     where: {
@@ -98,8 +98,8 @@ const get_last_message = async (topic) => {
 };
 
 module.exports = {
-  add_new_msg,
+  add_msg,
   list_topics,
-  list_messages,
-  get_last_message,
+  list_msgs,
+  get_last_msg,
 };

@@ -4,27 +4,26 @@ const logger = require("./src/pino_cfg");
 const express = require("express"); // express
 const cors = require("cors");
 const helmet = require("helmet");
+const bodyParser = require("body-parser");
 const routes = require("./src/route");
 
 const PORT = 5000;
 
 const Subscriptions = ["esp32-temp/out/#", "esp32-temp/in/#"];
 
-// init db and mqtt client
-const setup = async () => {
-  await db.client.sync({force:true});
+db.client.sync({force:false})
+.then(() => {
   for (s of Subscriptions){
-    await db.mqtt_sub.subscribe_topic(s);
+    mqtt.subscribe(s).catch((e) => logger.error("Error subscribing: ", e));
   }
-  return mqtt.create_client();
-}
-
-mqtt_client = setup().catch((e) => logger.error(e));
+})
+.catch((e) => logger.error("Error setting up the databse:", e));
 
 // express routes
 const app = express();
 app.use(cors());
 app.use(helmet());
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use("/mqtt", routes.mqtt);
 

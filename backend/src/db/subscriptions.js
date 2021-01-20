@@ -6,6 +6,7 @@ Subscription.init(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     topic: { type: DataTypes.TEXT, allowNull: false, unique: true },
+    qos: {type: DataTypes.INTEGER},
   },
   {
     sequelize,
@@ -17,8 +18,8 @@ Subscription.init(
 );
 
 // add a subscription topic to the db
-const subscribe_topic = async (topic_name) => {
-  // check if the topic already exists before adding it
+// checks if the topic exists before adding it
+const create_sub = async (topic_name, qos=0) => {
   var check = await Subscription.findAll({
     where:{
       topic: topic_name,
@@ -27,11 +28,15 @@ const subscribe_topic = async (topic_name) => {
   if (check.length === 0){
     var sub = await Subscription.create({
       topic: topic_name,
+      qos : qos,
     });
+    return true;
+  } else {
+    return false;
   }
 };
 
-const unsubscribe_topic = async (topic_name) => {
+const remove_sub = async (topic_name) => {
   Subscription.destroy({
     where: {
       topic: topic_name,
@@ -40,26 +45,25 @@ const unsubscribe_topic = async (topic_name) => {
 };
 
 // returns a raw query json of subscriptions
-const list_subscriptions = async () => {
+const list_subs = async () => {
   var subs = await Subscription.findAll({});
   return subs;
 };
 
-// returns subscribed topics as an array of strings
-const list_subscription_topics = async () => {
-  var subs = await Subscription.findAll({
-    attributes: ["topic"]
+const get_sub = async (topic) => {
+  var sub = await Subscription.findAll({
+    where: {
+      topic: topic,
+    }
   });
-  var sub_list = [];
-  for (s of subs) {
-    sub_list.push(s.topic);
-  }
-  return sub_list;
+  if (sub[0]) return sub[0];
+
+  return false;
 }
 
 module.exports = {
-  subscribe_topic,
-  unsubscribe_topic,
-  list_subscriptions,
-  list_subscription_topics,
+  create_sub,
+  remove_sub,
+  list_subs,
+  get_sub,
 };
