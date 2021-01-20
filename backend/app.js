@@ -12,7 +12,7 @@ const Subscriptions = ["esp32-temp/out/#", "esp32-temp/in/#"];
 
 // init db and mqtt client
 const setup = async () => {
-  await db.client.sync();
+  await db.client.sync({force:true});
   for (s of Subscriptions){
     await db.mqtt_sub.subscribe_topic(s);
   }

@@ -6,8 +6,10 @@ const formatters = {
 };
 const logger = pino({
   prettyPrint: true,
-  level: "debug",
+  level: "trace",
   formatters,
 });
-
+// DB logging is on trace
+// MQTT logging is on debug
+// anythig important is info and down
 module.exports = logger;

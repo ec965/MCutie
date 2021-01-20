@@ -11,6 +11,9 @@ MqttTopic.init(
   {
     sequelize,
     modelName: "mqtt_topic",
+    timestamps: true,
+    createdAt: true,
+    updateAt: false
   }
 );
 

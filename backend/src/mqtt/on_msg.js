@@ -3,8 +3,8 @@ const util = require("../util");
 const logger = require('../pino_cfg');
 // set to 0 to match values
 // set to -1 to let all values through
-const FloatResoltuion = -1;
-const IntResolution = -1;
+const FloatResoltuion = 0.1;
+const IntResolution = 1;
 
 const on_message = (topic, message) => {
   topic = String(topic);
@@ -45,7 +45,6 @@ const check_data_resolution = (last, current, float_resolution, int_resolution) 
   current_float = parseFloat(current);
   if (last_float % 1 > 0 || current_float % 1 > 0){
     if (Math.abs(last_float - current_float) <= float_resolution) {
-      console.log("float");
       return false;
     }
   }
@@ -54,7 +53,6 @@ const check_data_resolution = (last, current, float_resolution, int_resolution) 
   last_int = parseInt(last);
   current_int = parseInt(current);
   if (Math.abs(last_int - current_int) <= int_resolution) {
-    console.log("int");
     return false;
   }
   return true;

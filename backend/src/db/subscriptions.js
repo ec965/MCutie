@@ -10,6 +10,9 @@ Subscription.init(
   {
     sequelize,
     modelName: "subscription",
+    timestamps: true,
+    createdAt: true,
+    updatedAt: false,
   }
 );
 
@@ -21,7 +24,7 @@ const subscribe_topic = async (topic_name) => {
       topic: topic_name,
     }
   });
-  if (check === null){
+  if (check.length === 0){
     var sub = await Subscription.create({
       topic: topic_name,
     });
