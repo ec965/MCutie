@@ -16,9 +16,6 @@ const add_subs_db = async () => {
   await db.mqtt_sub.subscribe_topic("#");
 }
 
-
-
-
 add_subs_db().then(() => {
 
 
