@@ -10,31 +10,33 @@ var connopts = {
   password: "test123",
 };
 
-// connect mqtt client
-const client = mqtt.connect(Broker, connopts);
+const create_client = () => {
+  // connect mqtt client
+  const client = mqtt.connect(Broker, connopts);
 
-// bind callbacks for mqtt
+  // bind callbacks for mqtt
 
-// on connect, pull subscriptions from db and subscribe
-client.on("connect", () => {
-  db.mqtt_sub.list_subscription_topics()
-  .then((subscriptions) => {
-    client.subscribe(subscriptions, (err) => {
-      if (err) {
-        logger.error("[MQTT] Error subscribing: ", err);
-      }
-    } )
-  })
-  .catch((e) => logger.error("[DB] Error subscribing: ", e));
-});
+  // on connect, pull subscriptions from db and subscribe
+  client.on("connect", () => {
+    db.mqtt_sub.list_subscription_topics()
+    .then((subscriptions) => {
+      client.subscribe(subscriptions, (err) => {
+        if (err) {
+          logger.error("[MQTT] Error subscribing: ", err);
+        }
+      } )
+    })
+    .catch((e) => logger.error("[DB] Error subscribing: ", e));
+  });
 
-// on reconnect
-client.on("reconnect", () =>
-  logger.info("[MQTT] Disconnected, attempting to reconnect")
-);
+  // on reconnect
+  client.on("reconnect", () =>
+    logger.info("[MQTT] Disconnected, attempting to reconnect")
+  );
 
-// on message
-client.on("message", (topic, message) => on_message(topic, message));
+  // on message
+  client.on("message", (topic, message) => on_message(topic, message));
+  return client;
+}
 
-
-module.exports = client; 
+module.exports = {create_client}; 

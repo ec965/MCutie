@@ -1,8 +1,10 @@
 const db = require("../db/index");
 const util = require("../util");
 const logger = require('../pino_cfg');
-const FloatResoltuion = 0.1;
-const IntResolution = 1;
+// set to 0 to match values
+// set to -1 to let all values through
+const FloatResoltuion = -1;
+const IntResolution = -1;
 
 const on_message = (topic, message) => {
   topic = String(topic);
@@ -12,8 +14,11 @@ const on_message = (topic, message) => {
   db.mqtt_msg.get_last_message(topic)
   .then((last) => {
     if (last !== null) {
-      if (! check_data_resolution(last.message, message)) return;
-      logger.debug("last is not null");
+      // don't push data to db if it doesn't pass the resolution test
+      if (! check_data_resolution(last.message, message, FloatResoltuion, IntResolution)) {
+        logger.debug("Last mqtt msg didn't pass resolution test");
+        return;
+      }
     }
 
     logger.debug("[DB] Saving last mqtt msg to db.");
@@ -28,36 +33,35 @@ const on_message = (topic, message) => {
 
 
 // check data to see if it meets the criteria for pushing to DB
+// return true is data is OK
 /* 
-1. last != current
-2. abs(last - current) >= IntResolution
-3. abs(last - current) >= Float Resolution
+1. abs(last - current) >= IntResolution
+2. abs(last - current) >= Float Resolution
 */
-const check_data_resolution = (last, current) => {
-  // check values if they are strings
-  // check if current is equal to last
-  // if they are equal, don't write to db
-  if (isNaN(last) && isNaN(current)) {
-    if (String(last) !== String(current)) {
-      return true;
+const check_data_resolution = (last, current, float_resolution, int_resolution) => {
+  // check values if they are floats
+  // if data is smaller than the resolution, don't add it
+  last_float = parseFloat(last);
+  current_float = parseFloat(current);
+  if (last_float % 1 > 0 || current_float % 1 > 0){
+    if (Math.abs(last_float - current_float) <= float_resolution) {
+      console.log("float");
+      return false;
     }
   }
   // check values if they are ints
   // then check if the ints are too close based on IntResolution
-  else if (util.isInt(last) && util.isInt(current)) {
-    if (Math.abs(parseInt(last) - parseInt(current) >= IntResolution)) {
-      return true;
-    }
+  last_int = parseInt(last);
+  current_int = parseInt(current);
+  if (Math.abs(last_int - current_int) <= int_resolution) {
+    console.log("int");
+    return false;
   }
-  // check values if they are floats
-  // if data is smaller than the resolution, don't add it
-  else if (
-    Math.abs(parseFloat(last) - parseFloat(current)) >= FloatResoltuion
-  ) {
-    return true;
-  }
+  return true;
+}
 
-  return false;
-};
+if (require.main === module ) {
+  console.log(check_data_resolution("kasdjlfjal2", "adkf2"));
+}
 
 module.exports = on_message;

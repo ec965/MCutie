@@ -1,35 +1,32 @@
-const util = require("./src/util"); // isFloat and isInt utility
 const db = require("./src/db"); // db query wrappers
 const mqtt = require("./src/mqtt"); // mqtt client setup
-const pino = require("pino");
+const logger = require("./src/pino_cfg");
 const express = require("express"); // express
 const cors = require("cors");
 const helmet = require("helmet");
-const mqtt_routes = require("./src/mqtt_routes");
+const routes = require("./src/route");
 
 const PORT = 5000;
 
-// pino logger
-const formatters = {
-  bindings(bindings) {
-    return {};
-  },
-};
-const logger = pino({
-  prettyPrint: true,
-  level: "debug",
-  formatters,
-});
+const Subscriptions = ["esp32-temp/out/#", "esp32-temp/in/#"];
 
-// ensure mqtt_log table exists
-db.create_table();
+// init db and mqtt client
+const setup = async () => {
+  await db.client.sync();
+  for (s of Subscriptions){
+    await db.mqtt_sub.subscribe_topic(s);
+  }
+  return mqtt.create_client();
+}
+
+mqtt_client = setup().catch((e) => logger.error(e));
 
 // express routes
 const app = express();
 app.use(cors());
 app.use(helmet());
 
-app.use("/mqtt", mqtt_routes);
+app.use("/mqtt", routes.mqtt);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -38,6 +35,3 @@ app.get("/", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Listening at http://localhost:${PORT}`);
 });
-
-// mqtt.client.end();
-// db.client.close();

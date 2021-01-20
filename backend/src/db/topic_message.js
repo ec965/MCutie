@@ -1,5 +1,4 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
-const { mqtt_msg } = require(".");
 const sequelize = require("./client");
 
 // stores all topics
@@ -67,14 +66,14 @@ const add_new_msg = async (topic, message) => {
 // return an array of topic names and subscription status
 const list_topics = async () => {
   var topics = await MqttTopic.findAll({
-    attributes: ["topic"],
+    attributes: ["id","topic"],
   });
   return topics;
 };
 
 // list messages for a given topic
 const list_messages = async (topic) => {
-  var msgs = await MqttTopics.findAll({
+  var msgs = await MqttTopic.findAll({
     where: {
       topic: topic
     },

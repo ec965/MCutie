@@ -1,7 +1,8 @@
 const express = require("express");
 const db = require("../db/index");
-const router = express.Router();
 const logger = require("../pino_cfg");
+
+const router = express.Router();
 
 // get all mqtt topics
 router.get("/t", (req, res) => {

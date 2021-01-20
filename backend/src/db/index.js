@@ -1,5 +1,5 @@
-const client = require("./client");
 const mqtt_msg = require("./topic_message");
 const mqtt_sub = require('./subscriptions');
+const client = require("./client");
 
-module.exports = {client, mqtt_msg, mqtt_sub};
+module.exports = {mqtt_msg, mqtt_sub, client};

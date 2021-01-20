@@ -13,10 +13,19 @@ Subscription.init(
   }
 );
 
+// add a subscription topic to the db
 const subscribe_topic = async (topic_name) => {
-  var sub = await Subscription.create({
-    topic: topic_name,
+  // check if the topic already exists before adding it
+  var check = await Subscription.findAll({
+    where:{
+      topic: topic_name,
+    }
   });
+  if (check === null){
+    var sub = await Subscription.create({
+      topic: topic_name,
+    });
+  }
 };
 
 const unsubscribe_topic = async (topic_name) => {
