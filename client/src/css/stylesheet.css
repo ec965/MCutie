@@ -1,0 +1,106 @@
+@import url("./reset.css");
+:root {
+  --bg2-color: #0A0E14;
+  --bg-color: #4D5566;
+  --fg-color: #E6B450;
+  --fg2-color: #FFEE99;
+  --link-color: #39BAE6;
+  --link-hover-color: #95E6CB;
+  --lr-padding: 10vw;
+}
+
+html {
+  font-family: madaregular, Helvetica, Arial, sans-serif;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  position: relative;
+  min-height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  color:var(--fg-color);
+  padding: 1px;
+}
+h1{
+  font-size:32px;
+}
+h2{
+  font-size:26px;
+}
+h3{
+  font-size:22px;
+}
+h4{
+  font-size: 20px;
+}
+h5{
+  font-size: 18px;
+}
+h6{
+  font-size: 16px;
+}
+p{
+  font-size:15px;
+}
+
+body{
+  background-color: var(--bg-color);
+}
+
+a {
+  text-decoration: none;
+  color:var(--link-color);
+}
+
+a:hover{
+  text-decoration:underline;
+  color:var(--link-hover-color);
+}
+
+.nav-bar {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  background-color: var(--bg2-color);
+  color: var(--fg-color);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: var(--lr-padding);
+  padding-right:var(--lr-padding);
+}
+
+.nav-group {
+  justify-content: space-evenly;
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  padding-left: 10px;
+}
+
+.page {
+  padding-right:var(--lr-padding);
+  padding-left: var(--lr-padding);
+  padding-top: 16px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+tr {
+  border:1px solid var(--fg-color);
+  justify-content: center;
+}
+
+th, td {
+  color:var(--fg2-color);
+  padding: 10px;
+}
+table, tbody {
+  background-color: var(--b2-color);
+  color: var(--fg2-color);
+}
+
