@@ -6,7 +6,7 @@ const formatters = {
 };
 const logger = pino({
   prettyPrint: true,
-  level: "info",
+  level: process.env.LOGLEVEL || "debug",
   formatters,
 });
 // DB logging is on trace
