@@ -1,0 +1,61 @@
+const db = require("../models/index");
+const logger = require('../config/pino');
+
+// set to 0 to match values
+// set to -1 to let all values through
+const FloatResoltuion = process.env.MQTT_FLOAT_RES || 0.1;
+const IntResolution = process.env.MQTT_INT_RES || 1;
+
+const onMessage = async (topic, message) => {
+  topic = String(topic);
+  message = String(message); // messages can come in as bytes, but we want chars
+  logger.debug("[MQTT] RX: " + topic + ": " + message);
+
+  // check the last message against the new message, only add the new message if it passes the resolution test.
+  lastMsg = await db.Msg.findOne({
+    where: {
+     topic: topic 
+    },
+    order: db.sequelize.literal("id Desc"),
+    limit: 1,
+  })
+
+  if (lastMsg !== null){ // null means there's nothing in the database
+    if ( ! checkDataResolution(lastMsg.message, message, FloatResoltuion, IntResolution)) {
+      logger.debug("Last mqtt msg didn't pass resolution test.");
+      return;
+    }
+  }
+
+  logger.debug("Saving last mqtt msg to database.");
+  await db.Msg.create({message: message, topic: topic});
+}
+
+
+// check data to see if it meets the criteria for pushing to DB
+// return true is data is OK
+/* 
+1. abs(last - current) >= IntResolution
+2. abs(last - current) >= Float Resolution
+*/
+const checkDataResolution = (last, current, float_resolution, int_resolution) => {
+  // check values if they are floats
+  // if data is smaller than the resolution, don't add it
+  last_float = parseFloat(last);
+  current_float = parseFloat(current);
+  if (last_float % 1 > 0 || current_float % 1 > 0){
+    if (Math.abs(last_float - current_float) <= float_resolution) {
+      return false;
+    }
+  }
+  // check values if they are ints
+  // then check if the ints are too close based on IntResolution
+  last_int = parseInt(last);
+  current_int = parseInt(current);
+  if (Math.abs(last_int - current_int) <= int_resolution) {
+    return false;
+  }
+  return true;
+}
+
+module.exports = onMessage;
