@@ -72,6 +72,7 @@ router.post("/s", (req, res) => {
             res.sendStatus(502); // bad gateway to mqtt
             return;
           }
+          logger.debug('Subscribed to: ', JSON.stringify(granted, null, 2));
           db.Sub.create({
             topic: req.body.topic,
             qos: req.body.qos,
@@ -104,6 +105,7 @@ router.delete("/s", (req, res) => {
       if (err) {
         res.sendStatus(502);
       } else {
+        logger.debug("Unsubscribed from: ", req.body.topic);
         db.Sub.destroy({
           where:{
             topic: req.body.topic

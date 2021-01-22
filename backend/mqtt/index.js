@@ -18,7 +18,7 @@ const client = mqtt.connect(Broker, connOpts);
 // on connect, pull subscriptions from db and subscribe
 client.on("connect", () => {
   subscribeAll()
-    .catch((e) => logger.error("Error subscribing, this is likely because there is nothing in the database.", e));
+    .catch((e) => logger.error("Error subscribing, this is likely because the db has not been initialized.", e));
     //usually this error gets thrown b/c subscribeAll() checks the db before it is intialized.
 });
 

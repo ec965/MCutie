@@ -8,10 +8,12 @@ const db = require("./models/index");
 const mqtt = require("./mqtt/index"); 
 const logger = require("./config/pino");
 const routes = require("./route/index");
+const subscribeAll = require('./mqtt/sub');
 
-const PORT = process.env.jPORT || 5000;
+const PORT = process.env.PORT || 5000;
 
-db.sequelize.sync({alter:false})
+db.sequelize.sync({force:false})
+.then(subscribeAll(mqtt))
 .catch((e) => logger.error("Error setting up the databse:", e));
 
 // express routes
