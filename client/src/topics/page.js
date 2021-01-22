@@ -13,7 +13,11 @@ const TopicPage = (props) => {
     fetch(URL + GETMSG + props.topic)
       .then((response) => response.json())
       .then((data) => {
-        setData(data["mqtt_msgs"]);
+        for(let i=0; i<data.length; i++){
+          data[i]["createdAt"] = Date.parse(data[i]["createdAt"]);
+        }
+        setData(data);
+        console.log(JSON.stringify(data, null , 2));
       });
   }, [props.topic]);
 

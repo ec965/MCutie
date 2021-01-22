@@ -8,41 +8,27 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import Page from "../components/page.js";
+import DashBoard from "../dashboard/index.js"
 
 const MyNavBar = (props) => {
   return(
     <Router>
       <NavBar>
-
-        <NavLogo>
-          <Link to="/">MCutie</Link>
-        </NavLogo>
-
         <NavGroup>
-          <NavItem>
-            <Link to="/t">Topics</Link>
-          </NavItem>
-          <NavItem>
-            <Link to="/s">Subscriptions</Link>
-          </NavItem>
+          <NavLogo>
+            <Link to="/">MCutie</Link>
+          </NavLogo>
           <NavItem>
             MQTT Live
           </NavItem>
         </NavGroup>
-
       </NavBar>
-
       <Switch>
         <Route exact path="/">
-          <div>
-            <h1>Hello World!</h1>
-          </div>
-        </Route>
-        <Route path="/t">
-          <TableOfTopics/>
-        </Route>
-        <Route path="/s">
-          <TableOfSubs/>
+          <Page>
+            <DashBoard/>
+          </Page>
         </Route>
       </Switch>
     </Router>

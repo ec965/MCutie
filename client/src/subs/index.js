@@ -16,31 +16,22 @@ const TableOfSubs = (props) => {
   }, []);
 
   const rows = subs.map((r, i) => {
-    const time = new Date(r.createdAt);
     return(
       <TableRow key={i}>
-        <TableItem>
-          {i+1}
-        </TableItem>
-        <TableItem>{r.topic}</TableItem>
-        <TableItem>{r.qos}</TableItem>
-        <TableItem>{time.toLocaleString()}</TableItem>
+        <TableItem>{r["topic"]}</TableItem>
+        <TableItem>{r["qos"]}</TableItem>
       </TableRow>
     );
   });
 
   return(
-    <Page>
-      <Table>
-        <TableRow>
-          <TableHead>Index</TableHead>
-          <TableHead>Subscription</TableHead>
-          <TableHead>QoS</TableHead>
-          <TableHead>Added at</TableHead>
-        </TableRow>
-        {rows}
-      </Table>
-    </Page>
+    <Table>
+      <TableRow>
+        <TableHead>Subscription</TableHead>
+        <TableHead>QoS</TableHead>
+      </TableRow>
+      {rows}
+    </Table>
   );
 }
 

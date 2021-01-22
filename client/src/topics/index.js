@@ -7,7 +7,6 @@ import {
   Link,
 } from "react-router-dom";
 import TopicPage from './page.js';
-import Page from '../components/page.js';
 
 const TableOfTopics = (props) => {
   const [topics, setTopics] = useState([]);
@@ -17,10 +16,11 @@ const TableOfTopics = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setTopics(data);
+        console.log(data);
       })
   }, []);
 
-  const routeUrl = '/t';
+  const routeUrl = '/';
   
   const url_replacement = (str) => {
     return str.replaceAll("/", "_").replaceAll("%",'-');
@@ -30,41 +30,19 @@ const TableOfTopics = (props) => {
     return(
       <TableRow key={i}>
         <TableItem>
-          {i+1}
-        </TableItem>
-        <TableItem>
-          <Link to={`${routeUrl}/${url_replacement(r.topic)}`}>
-            {r.topic}
-          </Link>
+          {r.topic}
         </TableItem>
       </TableRow>
     );
   });
 
-  const routes = topics.map((r,i)=> {
-    return(
-      <Route key={i} path={`${routeUrl}/${url_replacement(r.topic)}`}>
-        <TopicPage topic={r.topic}/>
-      </Route>
-    );
-  });
-
-
   return (
-    <Switch>
-      <Route exact path={`${routeUrl}`}>
-        <Page>
-          <Table>
-            <TableRow>
-              <TableHead>Index</TableHead>
-              <TableHead>Topics</TableHead>
-            </TableRow>
-            {rows}
-          </Table>
-        </Page>
-      </Route>
-      {routes}
-    </Switch>
+    <Table>
+      <TableRow>
+        <TableHead>Topics</TableHead>
+      </TableRow>
+      {rows}
+    </Table>
   );
 }
 

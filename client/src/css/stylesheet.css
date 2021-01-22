@@ -104,3 +104,17 @@ table, tbody {
   color: var(--fg2-color);
 }
 
+.row, .col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.col {
+  flex-direction: column;
+}
