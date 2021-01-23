@@ -2,13 +2,12 @@ import React, {useEffect, useState} from 'react';
 import Page from "../components/page.js";
 import {Column, Row} from "../components/layout.js";
 import TableOfSubs from "./subs.js";
-import TableOfTopics from "./topics.js";
-import TopicChart from "./chart";
-import {URL, GETSUB, GETTOPICS, url_replacement} from "../util.js";
+import {TopicChart, TableOfTopics} from "./topics.js";
+import {URL, GETTOPICS, url_replacement} from "../util.js";
 import {Route, Switch} from "react-router-dom";
 
 const DashBoard = (props) => {
-  const routeUrl = "/";
+  const routeUrl = "/t/";
   const [topics, setTopics] = useState([]);
 
   useEffect(()=> {
@@ -36,7 +35,6 @@ const DashBoard = (props) => {
     <Page>
       <Column>
         <Row>
-          {/* default route should be the live web socket*/}
           <Switch>
             {charts}
           </Switch>
@@ -48,6 +46,8 @@ const DashBoard = (props) => {
           <Column>
             <TableOfSubs/>
           </Column>
+        </Row>
+        <Row>
         </Row>
       </Column>
     </Page>

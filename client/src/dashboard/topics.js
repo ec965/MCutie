@@ -1,10 +1,12 @@
-import React from "react";
+import React , {useState, useEffect} from "react";
 import {Table, TableHead, TableRow, TableItem} from "../components/table.js";
 import {
   Link,
 } from "react-router-dom";
+import {URL, GETMSG, upperFirstLetter} from "../util.js";
+import GenericChart from "./chart.js";
 
-const TableOfTopics = (props) => {
+export const TableOfTopics = (props) => {
 
   const rows = props.topics.map((r, i) => {
     return(
@@ -28,4 +30,31 @@ const TableOfTopics = (props) => {
   );
 }
 
-export default TableOfTopics;
+export const TopicChart = (props) => {
+
+  const [data, setData] = useState([]);
+  const label = upperFirstLetter(props.topic.split("/")[props.topic.split("/").length-2]);
+  const unit = props.topic.split("/")[props.topic.split("/").length-1];
+
+  useEffect(() => {
+    fetch(URL + GETMSG + props.topic)
+      .then((response) => response.json())
+      .then((data) => {
+        for(let i=0; i<data.length; i++){
+          data[i]["createdAt"] = Date.parse(data[i]["createdAt"]);
+        }
+        setData(data);
+        // console.log(JSON.stringify(data, null , 2));
+      });
+  }, [props.topic]);
+
+
+  return (
+    <GenericChart
+      topic={props.topic}
+      unit={unit}
+      label={label}
+      data={data}
+    />
+  );
+};

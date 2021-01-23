@@ -7,20 +7,29 @@ import {
   Link
 } from "react-router-dom";
 import DashBoard from "../dashboard/index.js"
+import LiveDash from '../livedash/index.js'
 
 const MyNavBar = (props) => {
   return(
     <Router>
       
       <NavBar>
-        <NavLogo>
-          <Link to="/">MCutie</Link>
-        </NavLogo>
+        <NavGroup>
+          <NavLogo>
+            <Link to="/">MCutie</Link>
+          </NavLogo>
+          <NavItem>
+            <Link to="/live">Live</Link>
+          </NavItem>
+        </NavGroup>
       </NavBar>
 
       <Switch>
-        <Route path="/">
+        <Route exact path="/">
           <DashBoard/>
+        </Route>
+        <Route path="/live">
+          <LiveDash/>
         </Route>
       </Switch>
     </Router>
