@@ -3,6 +3,8 @@ The server is an MQTT client. The server listens on subscribed topics and record
 
 The server also manages a REST API to view logged MQTT msgs and can update subscriptions.
 
+For `POST` and `DELETE` requests, use the x-www-form-urlencoded content policy.
+
 ## API Reference
 ## `GET`
 ### `/mqtt/t`
@@ -91,13 +93,27 @@ Request body should be in the format
 
 ## DELETE
 
+### `/mqtt/t`
+Delete all logged messages of a topic.
+
+* 400: bad request
+* 404: topic doesn't exist
+* 200: deleted
+* 500: error deleting from database
+Request body should be in the format:
+```json
+{
+    "topic": "<TOPIC>"
+}
+```
+
 ### `/mqtt/s`
 Unsubscribe from a topic.
 * 400: bad payload
 * 502: mqtt client failed to unsubscribe
 * 404: item to delete doesn't exist
 * 500: error deleting item from database
-Request body should be int he format:
+Request body should be in the format:
 ```json
 {
     "topic" : "<TOPIC>"

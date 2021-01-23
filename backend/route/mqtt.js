@@ -15,6 +15,35 @@ router.get("/t", (req, res) => {
 });
 
 
+// 400: bad request
+// 404: topic does not exist
+// 200: destroyed
+// 500: error deleting from db
+router.delete("/t", (req,res) => {
+  if (typeof req.body.topic !== "undefined"){
+    db.Msg.destroy({
+      where: {
+        topic:req.body.topic
+      }
+    })
+      .then((destroy) => {
+        if (! destroy){
+          res.sendStatus(404); // could not find item to destroy
+        } else {
+          res.sendStatus(200); // destroyed
+        }
+
+      })
+      .catch((e)=>{
+        logger.error(`Error deleting messages with topic ${req.body.topic}: ${e}`);
+        res.sendStatus(500);
+      });
+  } else {
+    res.sendStatus(400);
+  }
+})
+;
+
 // get mqtt messages for topic
 router.get("/m", (req, res) => {
   if (req.query.topic) {
@@ -138,8 +167,9 @@ router.delete("/s", (req, res) => {
               .then((destroy) => {
                 if ( ! destroy ){
                   res.sendStatus(404); // couldn't find item to destroy
+                } else {
+                  res.sendStatus(200);
                 }
-                res.sendStatus(200);
               })
               .catch((e) => {
                 logger.error(`Error deleting subscription: ${e}`);
