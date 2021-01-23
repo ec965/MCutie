@@ -3,6 +3,14 @@
   font-family: 'Noto Sans', sans-serif;
   src: url('http://fonts.cdnfonts.com/css/noto-sans');
 }
+@keyframes fadeIn{
+  0% {
+    opacity: 0;
+  }
+  100%{
+    opacity: 100;
+  }
+}
 :root {
   --base00: #657B83;
   --base01: #586E75;
@@ -114,6 +122,8 @@ a:hover{
   justify-content: center;
   display: flex;
   align-items: center;
+  animation-name:fadeIn;
+  animation-duration:1.2s;
 }
 /*-----TABLE-----*/
 tr {
@@ -125,7 +135,7 @@ th, td {
   color:var(--base2);
   padding: 10px;
 }
-th {
+th .fa-trash{
   font-size:1.25em;
 }
 td {
@@ -134,6 +144,14 @@ td {
 table, tbody {
   background-color: var(--b2-color);
   color: var(--base2);
+}
+.fa-times{
+  font-size:1.25em;
+  color: var(--orange);
+  transition:.1s;
+}
+.fa-times:hover{
+  color:var(--red);
 }
 /*-----Row & Col-----*/
 .row, .col {
@@ -195,7 +213,7 @@ form {
 .form-button{
   border-style: none;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
-  background-color:var(--blue);
+  background-color:var(--green);
   color: var(--base03);
   font-size: 1em;
   border-radius:10px;
@@ -229,6 +247,8 @@ form {
   flex-direction:column;
   display:flex;
   border-bottom:1px solid var(--base00);
+  animation-name:fadeIn;
+  animation-duration:.4s;
 }
 .chart h2{
   padding:8px;
@@ -243,4 +263,6 @@ footer {
   justify-content: space-between;
   padding:16px;
   align-items: center;
+  padding-left:var(--lr-padding);
+  padding-right:var(--lr-padding);
 }

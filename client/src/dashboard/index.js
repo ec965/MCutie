@@ -39,11 +39,9 @@ const DashBoard = (props) => {
             {charts}
           </Switch>
         </Row>
-        <Row>
+        <Row className="top">
           <Column>
             <TableOfTopics routeUrl={routeUrl} topics={topics}/>
-          </Column>
-          <Column>
             <TableOfSubs/>
           </Column>
         </Row>

@@ -97,7 +97,9 @@ const LiveDash = (props) => {
     <Page>
       <Column>
         <Row>
-          <LiveChart topic={liveTopic} data={rxData}/>
+          {liveTopic && 
+            <LiveChart topic={liveTopic} data={rxData}/>
+          }
         </Row>
         <Row>
           <LiveTopics onClick={handleClick}/>

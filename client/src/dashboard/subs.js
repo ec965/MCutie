@@ -68,7 +68,7 @@ const TableOfSubs = (props) => {
         <TableItem>{r["topic"]}</TableItem>
         <TableItem>{r["qos"]}</TableItem>
         {toggleDel && 
-          <TableItem onClick={handleDelete} id={r.topic}>X</TableItem>
+          <TableItem onClick={handleDelete} id={r.topic}><i class="fas fa-times"/></TableItem>
         }
       </TableRow>
     );
@@ -82,7 +82,9 @@ const TableOfSubs = (props) => {
           <TableHead>Subscription</TableHead>
           <TableHead>QoS</TableHead>
           {toggleDel && 
-            <TableHead>Delete</TableHead>
+            <TableHead>
+              <i class="far fa-trash-alt"></i>
+            </TableHead>
           }
         </TableRow>
         {rows}

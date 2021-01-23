@@ -6,7 +6,7 @@ const Footer = (props) => {
     <footer className="footer">
       <Column>
         <p>Enoch Chau</p>
-        <p> CopyWhatever 2021</p>
+        <p> CopyPlease 2021</p>
       </Column>
       <a href="https://github.com/ec965/mcutie">GitHub</a>
     </footer>

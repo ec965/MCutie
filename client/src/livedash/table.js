@@ -39,9 +39,9 @@ const LiveTopics = (props) => {
         <TableItem className="link" onClick={props.onClick} id={r.topic}>
           {r.topic}
         </TableItem>
-        {props.toggleDel && 
+        {toggleDel && 
           <TableItem onClick={handleDelete} id={r.topic}>
-            X
+            <i class="fas fa-times"></i>
           </TableItem>
         }
       </TableRow>
@@ -52,7 +52,9 @@ const LiveTopics = (props) => {
       <TableRow>
         <TableHead>Live Topics</TableHead>
         {toggleDel && 
-          <TableHead>Delete</TableHead>
+          <TableHead>
+            <i class="far fa-trash-alt"></i>
+          </TableHead>
         }
       </TableRow>
       {rows}
