@@ -8,7 +8,6 @@ MCutie should run concurrently with an MQTT broker such as mosquitto.
 * SQLite3
 
 ### todo
-1. DELETE request to destroy topic and it's messages
 2. websocket livestream
 
 ## Frontend
@@ -17,3 +16,5 @@ MCutie should run concurrently with an MQTT broker such as mosquitto.
 ### todo
 1. more CSS
 2. websocket live stream data
+3. toggle delete marks
+  1. implement delete for the non-live topics table

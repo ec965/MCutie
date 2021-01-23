@@ -5,10 +5,14 @@ const Footer = (props) => {
   return(
     <footer className="footer">
       <Column>
-        <p>Enoch Chau</p>
-        <p> CopyPlease 2021</p>
+        <a href="https://enochchau.com">
+          <div>Enoch Chau</div>
+          <div>2021</div>
+        </a>
       </Column>
-      <a href="https://github.com/ec965/mcutie">GitHub</a>
+      <a href="https://github.com/ec965/mcutie">
+        <i class="fab fa-github"></i>
+      </a>
     </footer>
   )
 }

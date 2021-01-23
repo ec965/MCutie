@@ -266,3 +266,6 @@ footer {
   padding-left:var(--lr-padding);
   padding-right:var(--lr-padding);
 }
+.fa-github{
+  font-size:2em;
+}
