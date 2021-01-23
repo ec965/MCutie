@@ -1,2 +1,3 @@
 const mqtt = require("./mqtt");
-module.exports = {mqtt};
+const websocket=require("./websocket");
+module.exports = {mqtt, websocket};

@@ -58,7 +58,16 @@ router.get("/s", (req, res) => {
 // if failed to subscribe: 502
 // if failed to add to DB: 500
 router.post("/s", (req, res) => {
-  if (typeof req.body.topic !== "undefined" && typeof req.body.qos !== "undefined"){
+  if (typeof req.body.topic !== "undefined"){
+    // check for valid qos, qos must be 0, 1, or 2
+    let qos = 0;
+    if (typeof req.body.qos !== "undefined"){
+      let qosInt = parseInt(req.body.qos);
+      if (0 <= qosInt && qosInt <= 2){
+        qos = qosInt;
+      }
+    }
+
     db.Sub.findOne({
       where:{
         topic:req.body.topic
@@ -66,22 +75,28 @@ router.post("/s", (req, res) => {
     })
     .then((sub) => {
       if (! sub){
-        mqtt.subscribe(req.body.topic, {qos: parseInt(req.body.qos)}, (err, granted) => {
+        mqtt.subscribe(String(req.body.topic), {qos: qos}, (err, granted) => {
           if (err) {
-            logger.error("Error subscribing: ", err);
+            logger.error(`Error subscribing: ${err}`);
             res.sendStatus(502); // bad gateway to mqtt
             return;
           }
-          logger.debug('Subscribed to: ', JSON.stringify(granted, null, 2));
-          db.Sub.create({
-            topic: req.body.topic,
-            qos: req.body.qos,
-          })
-            .then(() => res.sendStatus(200))
-            .catch((e) => {
-              logger.error("Error adding subscription to Database. Subscription likely already exists.")
-              res.sendStatus(500)
-            });
+          if (granted){
+            logger.debug(`Subscribed to: ${JSON.stringify(granted)}`);
+
+            db.Sub.create({
+              topic: req.body.topic,
+              qos: qos,
+            })
+              .then((item) => {
+                logger.debug(`Added to database: ${JSON.stringify(item)}`);
+                res.sendStatus(200);
+              })
+              .catch((e) => {
+                logger.error(`Error adding subscription to Database: ${e}`);
+                res.sendStatus(500)
+              });
+          }
         });
       } else {
         res.sendStatus(400);
@@ -96,32 +111,47 @@ router.post("/s", (req, res) => {
 
 // unsubscribe from a topic
 // if no body.topic : 400
-// if error unsubscribing: 502
+// if topic not found: 404
 // if item to delete doenst exist: 404
+// if error unsubscribing: 502
 // if error deleting item from db: 500 
 router.delete("/s", (req, res) => {
   if (typeof req.body.topic !== "undefined"){
-    mqtt.unsubscribe(req.body.topic, (err) => {
-      if (err) {
-        res.sendStatus(502);
+    db.Sub.findAll({
+      where:{topic: req.body.topic}
+    })
+    .then((rows) => {
+      // if topic isn't found in the database
+      if (rows.length === 0){
+        res.sendStatus(404);
       } else {
-        logger.debug("Unsubscribed from: ", req.body.topic);
-        db.Sub.destroy({
-          where:{
-            topic: req.body.topic
+        mqtt.unsubscribe(req.body.topic, (err) => {
+          if (err) {
+            res.sendStatus(502); // error unsubscribing
+          } else {
+            logger.debug(`Unsubscribed from: ${JSON.stringify(req.body.topic)}`);
+            db.Sub.destroy({
+              where:{
+                topic: req.body.topic
+              }
+            })
+              .then((destroy) => {
+                if ( ! destroy ){
+                  res.sendStatus(404); // couldn't find item to destroy
+                }
+                res.sendStatus(200);
+              })
+              .catch((e) => {
+                logger.error(`Error deleting subscription: ${e}`);
+                res.sendStatus(500);
+              });
           }
         })
-          .then((destroy) => {
-            if ( ! destroy ){
-              res.sendStatus(404);
-            }
-            res.sendStatus(200);
-          })
-          .catch((e) => {
-            logger.error("Error deleting subscription: ", e);
-            res.sendStatus(500);
-          });
       }
+    })
+    .catch((e)=>{
+      logger.error(`Error finding ${req.body.topic} for deletion.`);
+      res.sendStatus(500);
     })
   } else {
     res.sendStatus(400);

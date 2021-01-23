@@ -7,7 +7,12 @@ const subscribeAll = async (client) => {
   if ( subTopics.length > 0 ){
     for (s of subTopics){
       client.subscribe(s.topic, {qos: s.qos}, (err, granted) => {
-        logger.error("Error subscribing");
+        if (err) {
+          logger.error("Error subscribing: " + err);
+        }
+        if (granted) {
+          logger.info(`Subscribed to: ${JSON.stringify(granted)}`)        
+        }
       });
     }
   }

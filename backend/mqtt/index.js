@@ -2,6 +2,7 @@ const mqtt = require("mqtt"); // mqtt
 const logger = require('../config/pino');
 const onMessage = require('./msg');
 const subscribeAll = require('./sub');
+const MqttQ = require('./queue');
 
 const Broker = process.env.MQTT_BROKER || "mqtt://localhost:1883";
 var connOpts = {
@@ -18,7 +19,7 @@ const client = mqtt.connect(Broker, connOpts);
 // on connect, pull subscriptions from db and subscribe
 client.on("connect", () => {
   subscribeAll()
-    .catch((e) => logger.error("Error subscribing, this is likely because the db has not been initialized.", e));
+    .catch((e) => logger.error("Error subscribing all (ignore this error on startup):" + e));
     //usually this error gets thrown b/c subscribeAll() checks the db before it is intialized.
 });
 
@@ -29,8 +30,9 @@ client.on("reconnect", () => {
 
 // on message
 client.on("message", (topic, message) => {
+  MqttQ.send({topic: topic, message: String(message)});
   onMessage(topic, message)
-    .catch((e) => logger.error("Error processing MQTT message: ", e))
+    .catch((e) => logger.error("Error processing MQTT message: " + e))
 });
 
 module.exports = client; 
