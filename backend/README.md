@@ -103,3 +103,31 @@ Request body should be int he format:
     "topic" : "<TOPIC>"
 }
 ```
+
+
+## Web Socket Reference
+
+### `/live/`
+Get live messages or publish messages.
+
+#### Publish
+Publish message JSON structure:
+```json
+{
+  "request":"publish", 
+  "topic":"<TOPIC>", 
+  "message":"<MESSAGE>", 
+  "qos": "<QOS>"
+}
+```
+
+#### Live topic
+New data is sent every second.
+
+Start live topic JSON structure:
+```json
+{
+  "request":"live",
+  "topic": "<TOPIC>"
+}
+```

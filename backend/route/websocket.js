@@ -23,21 +23,21 @@ const router = express.Router();
 }
 */
 router.ws('/', (ws, req) => {
-  let liveTopic;
+  var liveTopic;
 
-  setInterval(()=>{
-    if (liveTopic && ws.readyState === ws.OPEN){
-      db.Msg.findAll({
-        where: {
-          topic:liveTopic
-        }
-      })
-        .then((msgs) => {
-          ws.send(JSON.stringify(msgs));
-        })
-        .catch((e) => logger.error("Error sending messages on Websocket: " + e));
-    }
-  }, 1000);
+  // setInterval(()=>{
+  //   if (liveTopic && ws.readyState === ws.OPEN){
+  //     db.Msg.findAll({
+  //       where: {
+  //         topic:liveTopic
+  //       }
+  //     })
+  //       .then((msgs) => {
+  //         ws.send(JSON.stringify(msgs));
+  //       })
+  //       .catch((e) => logger.error("Error sending messages on Websocket: " + e));
+  //   }
+  // }, 1000);
 
   ws.on('message', (msg) => {
     try{
@@ -50,8 +50,16 @@ router.ws('/', (ws, req) => {
           checkTopicExist(msgjson)
           .then((topic) => {
             liveTopic = topic;
-            console.log(liveTopic);
-            console.log("Starting live topic");
+            logger.debug("Starting live topic");
+            db.Msg.findAll({
+              where: {
+                topic:liveTopic
+              }
+            })
+              .then((msgs) => {
+                ws.send(JSON.stringify(msgs));
+              })
+              .catch((e) => logger.error("Error sending messages on Websocket: " + e));
           })
           .catch((e)=> logger.error("Error checking topic at websocket: " + e));
 
@@ -61,6 +69,7 @@ router.ws('/', (ws, req) => {
       logger.debug("Invalid json at websocket: " + msg + "\nError: " + e);
     }
   });
+
   ws.on('close', ()=> {
     logger.debug("Websocket closed.");
   });
