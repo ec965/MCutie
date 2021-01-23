@@ -2,7 +2,6 @@ const mqtt = require("mqtt"); // mqtt
 const logger = require('../config/pino');
 const onMessage = require('./msg');
 const subscribeAll = require('./sub');
-const MqttQ = require('./queue');
 
 const Broker = process.env.MQTT_BROKER || "mqtt://localhost:1883";
 var connOpts = {
@@ -30,7 +29,6 @@ client.on("reconnect", () => {
 
 // on message
 client.on("message", (topic, message) => {
-  MqttQ.send({topic: topic, message: String(message)});
   onMessage(topic, message)
     .catch((e) => logger.error("Error processing MQTT message: " + e))
 });

@@ -1,7 +1,6 @@
 const express = require('express');
 const logger = require("../config/pino");
 const mqtt = require("../mqtt/index");
-const MqttQ = require("../mqtt/queue");
 const db = require("../models/index");
 
 const router = express.Router();
