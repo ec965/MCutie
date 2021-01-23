@@ -24,7 +24,7 @@ const DashBoard = (props) => {
 
   const charts = topics.map((r,i) => {
     return(
-      <Route key={i} path={r.routeUrl}>
+      <Route key={i} exact path={r.routeUrl}>
         <TopicChart topic={r.topic}/>
       </Route>
     );

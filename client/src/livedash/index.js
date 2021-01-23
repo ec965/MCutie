@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
+import TableOfSubs from "../dashboard/subs";
+import {Row, Column} from "../components/layout.js";
+import Page from '../components/page.js';
 import {WEBSOCKET, URL, GETTOPICS } from '../util';
 import LiveTopics from './table.js';
 import LivePublisher from './publisher.js';
@@ -107,14 +110,27 @@ const LiveDash = (props) => {
   }
 
   return(
-    <div>
-      <LivePublisher
-        onSubmit={handlePublish}
-        onChange={handleChange}
-      />
-      <LiveTopics onClick={handleClick} topics={topics}/>
-      <LiveChart topic={liveTopic} data={rxData}/>
-    </div>
+    <Page>
+      <Column>
+        <Row>
+          <LiveChart topic={liveTopic} data={rxData}/>
+        </Row>
+        <Row>
+          <LiveTopics onClick={handleClick} topics={topics}/>
+        </Row>
+        <Row className="top space">
+          <Row>
+            <LivePublisher
+              onSubmit={handlePublish}
+              onChange={handleChange}
+            />
+          </Row>
+          <Column className="top">
+            <TableOfSubs/>
+          </Column>
+        </Row>
+      </Column>
+    </Page>
   );
 }
 

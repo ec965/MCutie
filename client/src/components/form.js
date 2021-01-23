@@ -10,9 +10,10 @@ export const Form = (props) => {
 
 export const FormItem = (props) => {
   return(
-    <label className="form-label">{props.children}
-      <input name={props.name} placeholder={props.placeholder} onChange={props.onChange} type={props.inputType}/>
-    </label>
+    <div className="form-label">
+      <label>{props.children}</label>
+      <input name={props.name} placeholder={props.placeholder} onChange={props.onChange} type={props.type}/>
+    </div>
   );
 }
 

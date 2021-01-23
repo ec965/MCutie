@@ -5,14 +5,14 @@ const LivePublisher = (props) =>{
   return(
     <Form onSubmit={props.onSubmit}>
       <h3>Publisher</h3>
-      <FormItem onChange={props.onChange} name="topic">
-        <p>Topic</p>
+      <FormItem type='text' onChange={props.onChange} name="topic">
+        Topic
       </FormItem>
-      <FormItem onChange={props.onChange} name="message">
-        <p>Message</p>
+      <FormItem type='text' onChange={props.onChange} name="message">
+        Message
       </FormItem>
-      <FormItem placeholder={0} onChange={props.onChange} name="qos">
-        <p>QoS</p>
+      <FormItem type='text' placeholder={0} onChange={props.onChange} name="qos">
+        QoS
       </FormItem>
       <FormButton label="Publish"/>
     </Form>

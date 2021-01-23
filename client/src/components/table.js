@@ -12,14 +12,14 @@ export const Table = (props) => {
 
 export const TableHead = (props) => {
   return(
-    <th className="table-head">{props.children}</th>
+    <th className={"table-head " + props.className}>{props.children}</th>
   );
 }
 
 export const TableItem = (props) => {
-  return(<td className="table-item">{props.children}</td>);
+  return(<td onClick={props.onClick} id={props.id} className={"table-item " + props.className}>{props.children}</td>);
 }
 
 export const TableRow = (props) => {
-  return (<tr className="table-row">{props.children}</tr>)
+  return (<tr onClick={props.onClick} id={props.id} className={"table-row " + props.className}>{props.children}</tr>)
 }

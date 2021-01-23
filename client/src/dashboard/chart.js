@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   LineChart,
   Line,
@@ -7,6 +7,7 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
+import {colors} from '../util.js';
 
 // Do/HH:mm
 const formatDateTime = (unixtime) => {
@@ -16,36 +17,76 @@ const formatDateTime = (unixtime) => {
 // HH:mm:ss
 const formatTime = (unixtime) => {
   const time = new Date(unixtime);
-  return `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+  return `${time.getMonth()+1}/${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
 }
 
-
+const CustomToolTip = ({payload, label, active, unit}) => {
+  if(active && payload !== null && typeof payload !== "undefined"){
+    if (payload.length > 0){
+      return(
+        <div className="tool-tip">
+          <p>{`${payload[0].value} ${unit}`}</p>
+          <p>{formatTime(label)}</p>
+        </div>
+      );
+    }
+  }
+  return(<p>placeholder</p>);
+}
 
 const GenericChart = (props) => {
+  const [width, setWidth] = useState(960);
+  const [height, setHeight] = useState(540)
+  const ref = useRef(null);
   const margin = 15;
+  const unit = props.unit;
+
+  useEffect(()=>{
+    if (window.innerWidth < 1000){
+      setWidth(640);
+      setHeight(360);
+    }
+    if (window.innerWidth < 400){
+      setWidth(256);
+      setHeight(144);
+    }
+  },[]);
+
   return (
-    <div>
+    <div className="chart">
       <h2>{props.topic}</h2>
-      <LineChart width={960} height={540} data={props.data}
+      <LineChart width={width} height={height} data={props.data}
         margin={{top:margin, bottom: margin, left: margin, right: margin}}>
-        <Line type="monotone" dataKey="message" dot={false} />
-        <CartesianGrid stroke="#ccc" />
-        <Tooltip
-          formatter={(value, name, props) => [`${value} ${props.unit}`,]}
-          labelFormatter={(value) => formatTime(value)}
+        <Line 
+          type="monotone" 
+          dataKey="message" 
+          dot={false} 
+          stroke={colors.magenta} 
+          strokeWidth={1.75}
         />
+        <CartesianGrid stroke={colors.base1} />
+        <Tooltip
+          content={<CustomToolTip/>}
+          unit={unit}
+        />
+          {/* formatter={(value, name, props) => [`${value} ${unit}`,]}
+          labelFormatter={(value) => formatTime(value)}
+        /> */}
         <XAxis
           dataKey="createdAt"
           scale="time"
           type="number"
           domain={['dataMin', 'dataMax']}
           tickFormatter={unixtime => formatDateTime(unixtime)}
-          label={{ value: "Time (Date/HH:mm)", position: "insideBottom", offset: -9 }}
+          label={{ value: "Time (Date/HH:mm)", position: "insideBottom", offset: -8, fill:colors.base1 }}
+          stroke={colors.base2}
+          height={42}
         />
         <YAxis
           type="number"
           domain={[0, 'dataMax + 2']}
-          label={{ value: `${props.label} (${props.unit})`, position: "insideLeft", angle: -90}}
+          label={{ value: `${props.label} (${props.unit})`, position: "insideLeft", angle: -90, fill:colors.base1}}
+          stroke={colors.base2}
         />
       </LineChart>
     </div>

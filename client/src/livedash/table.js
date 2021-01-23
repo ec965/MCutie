@@ -5,8 +5,8 @@ const LiveTopics = (props) => {
   const rows = props.topics.map((r,i) => {
     return(
       <TableRow key={i}>
-        <TableItem>
-          <h5 onClick={props.onClick} id={r.topic}>{r.topic}</h5>
+        <TableItem className="link" onClick={props.onClick} id={r.topic}>
+          {r.topic}
         </TableItem>
       </TableRow>
     );

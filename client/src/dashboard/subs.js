@@ -55,7 +55,7 @@ const TableOfSubs = (props) => {
   });
 
   return(
-    <div>
+    <>
       <SubForm onSubmit={handleSubmit} onChange={handleChange}/>
       <Table>
         <TableRow>
@@ -64,20 +64,21 @@ const TableOfSubs = (props) => {
         </TableRow>
         {rows}
       </Table>
-    </div>
+    </>
   );
 }
 
 const SubForm = (props) =>{
   return(
     <Form onSubmit={props.onSubmit}>
-      <FormItem onChange={props.onChange} name="sub">
-        <p>Add Subscription</p>
+      <h3>Subscriber</h3>
+      <FormItem type="text" onChange={props.onChange} name="sub">
+        Topic
       </FormItem>
-      <FormItem onChange={props.onChange} placeholder={0} name="qos">
-        <p>QoS</p>
+      <FormItem type="text" onChange={props.onChange} placeholder={0} name="qos">
+        QoS
       </FormItem>
-      <FormButton label="Submit"/>
+      <FormButton label="Subscribe"/>
     </Form>
   );
 }
