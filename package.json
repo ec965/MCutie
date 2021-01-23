@@ -14,8 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/ec965/MQTT-cutie.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Enoch Chau",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ec965/MQTT-cutie/issues"
   },
