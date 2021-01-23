@@ -5,6 +5,7 @@ import {URL, GETSUB} from "../util.js";
 import qs from "querystring";
 
 const TableOfSubs = (props) => {
+  const [toggleDel, setToggleDel] = useState(false);
   const [subs, setSubs] = useState([]);
   const [newSub, setNewSub] = useState("");
   const [newQos, setNewQos] = useState(0);
@@ -45,11 +46,30 @@ const TableOfSubs = (props) => {
     }
   }
 
+  const handleDelete = (event) => {
+    const reqOpt = {
+      method: "DELETE",
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: qs.stringify({topic:event.target.id})
+    }
+    fetch(URL+GETSUB, reqOpt)
+      .then((res)=>{
+        if(!res.ok){
+          throw new Error(res.status);
+        } else return res;
+      })
+      .then(() => setRefetch(!refetch))
+      .catch((err) => console.log(err));
+  }
+
   const rows = subs.map((r, i) => {
     return(
       <TableRow key={i}>
         <TableItem>{r["topic"]}</TableItem>
         <TableItem>{r["qos"]}</TableItem>
+        {toggleDel && 
+          <TableItem onClick={handleDelete} id={r.topic}>X</TableItem>
+        }
       </TableRow>
     );
   });
@@ -61,6 +81,9 @@ const TableOfSubs = (props) => {
         <TableRow>
           <TableHead>Subscription</TableHead>
           <TableHead>QoS</TableHead>
+          {toggleDel && 
+            <TableHead>Delete</TableHead>
+          }
         </TableRow>
         {rows}
       </Table>

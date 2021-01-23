@@ -4,7 +4,7 @@ import qs from "querystring";
 import { URL, GETTOPICS } from '../util.js';
 
 const LiveTopics = (props) => {
-  const [del, setDel] = useState(true);
+  const [toggleDel, setToggleDel] = useState(false);
   // topics for the live topic table
   const [topics, setTopics] = useState([]);
   const [refetch, setRefetch] = useState(true);
@@ -17,7 +17,7 @@ const LiveTopics = (props) => {
       });
   }, [refetch]);
 
-  const onDelete = (event) =>{
+  const handleDelete = (event) =>{
     const reqOpt = {
       method: "DELETE",
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -39,8 +39,8 @@ const LiveTopics = (props) => {
         <TableItem className="link" onClick={props.onClick} id={r.topic}>
           {r.topic}
         </TableItem>
-        {del && 
-          <TableItem onClick={onDelete} id={r.topic}>
+        {props.toggleDel && 
+          <TableItem onClick={handleDelete} id={r.topic}>
             X
           </TableItem>
         }
@@ -51,8 +51,8 @@ const LiveTopics = (props) => {
     <Table>
       <TableRow>
         <TableHead>Live Topics</TableHead>
-        {del && 
-        <TableHead>Delete</TableHead>
+        {toggleDel && 
+          <TableHead>Delete</TableHead>
         }
       </TableRow>
       {rows}
