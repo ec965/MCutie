@@ -73,6 +73,13 @@ a:hover{
   text-decoration: none;
   color:var(--base3);
 }
+.link{
+  color:var(--magenta);
+  transition:0.2s;
+}
+.link:hover{
+  color:var(--base3);
+}
 /*-----NAV-----*/
 .nav-bar {
   height:60px;
@@ -123,13 +130,6 @@ th {
 }
 td {
   font-size:1em;
-}
-td.link{
-  color:var(--magenta);
-  transition:0.2s;
-}
-td.link:hover{
-  color:var(--base3);
 }
 table, tbody {
   background-color: var(--b2-color);

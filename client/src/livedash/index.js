@@ -14,8 +14,6 @@ const LiveDash = (props) => {
 
   // data coming in on the web socket
   const [rxData, setRxData] = useState([]);
-  // topics for the live topic table
-  const [topics, setTopics] = useState([]);
   // current live topic to display on the chart
   const [liveTopic, setLiveTopic] = useState("");
 
@@ -38,14 +36,6 @@ const LiveDash = (props) => {
     };
 
   }, []); 
-
-  useEffect(() => {
-    fetch(URL + GETTOPICS)
-      .then((res) => res.json())
-      .then((data) => {
-        setTopics(data);
-      });
-  }, []);
 
   useEffect(()=>{
     if (!ws.current) return;
@@ -93,19 +83,13 @@ const LiveDash = (props) => {
 
     if (ws.current.readyState === ws.current.OPEN){
       setLiveTopic(event.target.id);
-      
-      for(let i=0; i<topics.length; i++){
-        if(event.target.id === topics[i].topic){
-          var txData = (JSON.stringify(
-            {
-              request:"live",
-              topic: topics[i].topic
-            }
-          ));
-          ws.current.send(txData);
-          break;
+      var txData = (JSON.stringify(
+        {
+          request:"live",
+          topic: event.target.id
         }
-      }
+      ));
+      ws.current.send(txData);
     }
   }
 
@@ -116,7 +100,7 @@ const LiveDash = (props) => {
           <LiveChart topic={liveTopic} data={rxData}/>
         </Row>
         <Row>
-          <LiveTopics onClick={handleClick} topics={topics}/>
+          <LiveTopics onClick={handleClick}/>
         </Row>
         <Row className="top space">
           <Row>

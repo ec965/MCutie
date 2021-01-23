@@ -3,7 +3,7 @@ import {Column} from '../components/layout';
 
 const Footer = (props) => {
   return(
-    <footer clasName="footer">
+    <footer className="footer">
       <Column>
         <p>Enoch Chau</p>
         <p> CopyWhatever 2021</p>
