@@ -57,7 +57,7 @@ a:hover{
   text-decoration:underline;
   color:var(--link-hover-color);
 }
-
+/*-----NAV-----*/
 .nav-bar {
   justify-content: space-between;
   display: flex;
@@ -80,7 +80,7 @@ a:hover{
 .nav-item {
   padding-left: 10px;
 }
-
+/*-----PAGE-----*/
 .page {
   padding-right:var(--lr-padding);
   padding-left: var(--lr-padding);
@@ -89,7 +89,7 @@ a:hover{
   display: flex;
   align-items: center;
 }
-
+/*-----TABLE-----*/
 tr {
   border:1px solid var(--fg-color);
   justify-content: center;
@@ -103,7 +103,7 @@ table, tbody {
   background-color: var(--b2-color);
   color: var(--fg2-color);
 }
-
+/*-----Row & Col-----*/
 .row, .col {
   display: flex;
   justify-content: center;
@@ -117,4 +117,19 @@ table, tbody {
 
 .col {
   flex-direction: column;
+}
+/*-----FORM-----*/
+form {
+
+}
+
+.form-label{
+
+}
+.form-label input{
+
+}
+
+.form-button{
+
 }

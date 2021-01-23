@@ -1,6 +1,4 @@
 import React from 'react';
-import TableOfTopics from "../topics/index.js";
-import TableOfSubs from "../subs/index.js";
 import {NavBar, NavItem, NavLogo, NavGroup} from "./navitems.js";
 import {
   BrowserRouter as Router,
@@ -8,27 +6,21 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Page from "../components/page.js";
 import DashBoard from "../dashboard/index.js"
 
 const MyNavBar = (props) => {
   return(
     <Router>
+      
       <NavBar>
-        <NavGroup>
-          <NavLogo>
-            <Link to="/">MCutie</Link>
-          </NavLogo>
-          <NavItem>
-            MQTT Live
-          </NavItem>
-        </NavGroup>
+        <NavLogo>
+          <Link to="/">MCutie</Link>
+        </NavLogo>
       </NavBar>
+
       <Switch>
-        <Route exact path="/">
-          <Page>
-            <DashBoard/>
-          </Page>
+        <Route path="/">
+          <DashBoard/>
         </Route>
       </Switch>
     </Router>

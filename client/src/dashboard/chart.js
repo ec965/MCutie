@@ -9,10 +9,12 @@ import {
 } from "recharts";
 import { URL, GETMSG, upperFirstLetter } from "../util.js";
 
+// Do/HH:mm
 const formatDateTime = (unixtime) => {
   const time = new Date(unixtime);
   return `${time.getDate()}/${time.getHours()}:${time.getMinutes()}`;
 }
+// HH:mm:ss
 const formatTime = (unixtime) => {
   const time = new Date(unixtime);
   return `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
