@@ -1,6 +1,7 @@
 const logger = require("../config/pino");
 const mqtt = require("../mqtt/index");
 const db = require("../models/index");
+var newMsg = require("../mqtt/newMsg");
 
 module.exports = (wss) => {
   wss.on('connection', (ws) => {
@@ -8,25 +9,27 @@ module.exports = (wss) => {
     var liveTopic;
 
     setInterval(()=>{
-      if (liveTopic && ws.readyState === ws.OPEN){
-        db.Msg.findAll({
-          where: {
-            topic:liveTopic
-          }
-        })
-          .then((msgs) => {
-            ws.send(JSON.stringify({response:"data", data:msgs}));
+      if (ws.readyState === ws.OPEN){
+        if (liveTopic && newMsg){
+          db.Msg.findAll({
+            where: {
+              topic:liveTopic
+            }
           })
-          .catch((e) => logger.error("Error sending messages on Websocket: " + e));
-        
-        db.sequelize.query("SELECT DISTINCT topic FROM `msgs`")
-          .then(([topics,metadata]) => {
-            ws.send(JSON.stringify({response: "new topics", data:topics}));
-          })
-          .catch((e) => {
-            logger.error("Error sending new topics on Websocket: ", e);
-          });
-
+            .then((msgs) => {
+              ws.send(JSON.stringify({response:"data", data:msgs}));
+            })
+            .catch((e) => logger.error("Error sending messages on Websocket: " + e));
+          
+          db.sequelize.query("SELECT DISTINCT topic FROM `msgs`")
+            .then(([topics,metadata]) => {
+              ws.send(JSON.stringify({response: "new topics", data:topics}));
+            })
+            .catch((e) => {
+              logger.error("Error sending new topics on Websocket: ", e);
+            });
+        }
+        newMsg[0]=false;
       }
     }, 1000);
 
@@ -48,7 +51,7 @@ module.exports = (wss) => {
                 }
               })
                 .then((msgs) => {
-                  ws.send(JSON.stringify(msgs));
+                  ws.send(JSON.stringify({response:'data', data:msgs}));
                 })
                 .catch((e) => logger.error("Error sending messages on Websocket: " + e));
             })

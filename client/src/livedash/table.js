@@ -10,6 +10,7 @@ const LiveTopics = (props) => {
   const [topics, setTopics] = useState([]);
   const [refetch, setRefetch] = useState(true);
 
+  // initial fetch to get topics
   useEffect(() => {
     fetch(URL + GETTOPICS)
       .then((res) => res.json())
@@ -18,13 +19,14 @@ const LiveTopics = (props) => {
       });
   }, [refetch]);
 
+  // update topics based on websocket output
   useEffect(() => {
-    if (props.newTopics.length !== 0){
+    if(props.newTopics.length !== 0){
       setTopics(props.newTopics);
     }
-    console.log(props.newTopics);
   }, [props.newTopics]);
 
+  // delete topics & it's msgs from the database
   const handleDelete = (event) =>{
     const reqOpt = {
       method: "DELETE",
@@ -40,6 +42,8 @@ const LiveTopics = (props) => {
       .then(() => setRefetch(!refetch))
       .catch((err) => console.log(err));
   }
+
+  // toggle allow deletion on the client
   const handleSwitch = (event) => {
     setToggleDel(event.target.checked);
   }

@@ -21,7 +21,7 @@ const MyNavBar = (props) => {
           </NavLogo>
           <NavItem>
             <Link to="/t">
-              <i class="fas fa-chart-line"></i>
+              <i className="fas fa-chart-line"></i>
             </Link>
           </NavItem>
         </NavGroup>

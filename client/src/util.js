@@ -1,3 +1,5 @@
+import {useRef, useEffect} from 'react';
+
 export const upperFirstLetter = (str) => {
   if (typeof str !== 'undefined' && str.length > 0){
     return str[0].toUpperCase() + str.substr(1);

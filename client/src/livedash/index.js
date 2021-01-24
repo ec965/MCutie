@@ -23,6 +23,7 @@ const LiveDash = (props) => {
   const [pubMsg, setPubMsg] = useState("");
   const [pubQos, setPubQos] = useState(0);
 
+  // websocket stuff
   useEffect(()=>{
     ws.current = new WebSocket(WEBSOCKET);
     ws.current.onopen = () => {
@@ -34,7 +35,7 @@ const LiveDash = (props) => {
     
     ws.current.onmessage = (event) => {
       let data = JSON.parse(event.data);
-      console.log(data);
+      // check the reponse to see what we need to parse for
       if (data.response === "data"){
         for(let i=0; i<data.data.length; i++){
           // parse date into unix time for chart
@@ -43,7 +44,6 @@ const LiveDash = (props) => {
         setRxData(data.data);
       } 
       else if (data.response === "new topics"){
-        console.log(data.data);
         setNewTopics(data.data);
       }
     }
