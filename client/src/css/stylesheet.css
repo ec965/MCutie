@@ -39,9 +39,10 @@ html {
   min-height: 100%;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6, p, a, th{
   color:var(--base3);
   padding: 1px;
+  font-weight:600;
 }
 h1{
   font-size:3em;
@@ -82,11 +83,11 @@ a:hover{
   color:var(--base3);
 }
 .link{
-  color:var(--magenta);
-  transition:0.2s;
+  color:var(--magenta) !important;
+  transition:0.2s !important;
 }
 .link:hover{
-  color:var(--base3);
+  color:var(--base3) !important;
 }
 /*-----NAV-----*/
 .nav-bar {
@@ -147,11 +148,8 @@ table, tbody {
 }
 .fa-times{
   font-size:1.25em;
-  color: var(--orange);
   transition:.1s;
-}
-.fa-times:hover{
-  color:var(--red);
+  color:var(--base01);
 }
 /*-----Row & Col-----*/
 .row, .col {
@@ -175,6 +173,66 @@ table, tbody {
 .space {
   justify-content: space-between;
 }
+
+/*-----SWITCH-----*/
+
+.switch {
+  position:relative;
+  width:44px;
+  height:24px;
+}
+.slider{
+  background-color: var(--base01);
+  top:0px;
+  left:0px;
+  right:0;
+  bottom:0;
+  width:48px;
+  height:24px;
+  position: absolute;
+  border-radius:14px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
+  transition:0.4s;
+}
+.slider:before{
+  content:"";
+  display:block;
+  background-color: var(--base3);
+  position: absolute;
+  border-radius: 50%;
+  width:24px;
+  height:24px;
+  transition:0.4s;
+}
+.switch input:checked + .slider{
+  background-color: var(--magenta);
+}
+.switch input{
+  position: absolute;
+  height:1px;
+  width:1px;
+}
+.switch input:checked + .slider:before{
+  transform: translateX(24px);
+}
+
+.table-switch{
+  width:32px;
+  height:16px;
+  margin-right:40px;
+}
+.table-switch .slider{
+  width:32px;
+  height:16px;
+}
+.table-switch .slider:before{
+  width:16px;
+  height:16px;
+}
+.table-switch input:checked + .slider:before{
+  transform: translateX(16px);
+}
+
 /*-----FORM-----*/
 form {
   align-items:center;

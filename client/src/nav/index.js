@@ -6,7 +6,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import DashBoard from "../dashboard/index.js"
+import DashBoard from "../data/index.js"
 import LiveDash from '../livedash/index.js'
 import Footer from "./footer";
 
@@ -20,7 +20,9 @@ const MyNavBar = (props) => {
             <Link to="/">MCutie</Link>
           </NavLogo>
           <NavItem>
-            <Link to="/live">Live</Link>
+            <Link to="/t">
+              <i class="fas fa-chart-line"></i>
+            </Link>
           </NavItem>
         </NavGroup>
         <NavGroup>
@@ -35,11 +37,11 @@ const MyNavBar = (props) => {
       </NavBar>
 
       <Switch>
-        <Route path="/live">
-          <LiveDash/>
+        <Route path="/t">
+          <DashBoard/>
         </Route>
         <Route path="/">
-          <DashBoard/>
+          <LiveDash/>
         </Route>
       </Switch>
 

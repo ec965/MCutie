@@ -7,18 +7,8 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
-import {colors} from '../util.js';
+import {colors, formatDateTime, formatShortDateTime} from '../util.js';
 
-// Do/HH:mm
-const formatDateTime = (unixtime) => {
-  const time = new Date(unixtime);
-  return `${time.getDate()}/${time.getHours()}:${time.getMinutes()}`;
-}
-// HH:mm:ss
-const formatTime = (unixtime) => {
-  const time = new Date(unixtime);
-  return `${time.getMonth()+1}/${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
-}
 
 const CustomToolTip = ({payload, label, active, unit}) => {
   if(active && payload !== null && typeof payload !== "undefined"){
@@ -26,7 +16,7 @@ const CustomToolTip = ({payload, label, active, unit}) => {
       return(
         <div className="tool-tip">
           <p>{`${payload[0].value} ${unit}`}</p>
-          <p>{formatTime(label)}</p>
+          <p>{formatDateTime(label)}</p>
         </div>
       );
     }
@@ -35,9 +25,10 @@ const CustomToolTip = ({payload, label, active, unit}) => {
 }
 
 const GenericChart = (props) => {
+  console.log(props.data);
   const [width, setWidth] = useState(960);
   const [height, setHeight] = useState(540)
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([{message:1, createdAt:1}]);
   const margin = 15;
   const unit = props.unit;
 
@@ -76,16 +67,13 @@ const GenericChart = (props) => {
           content={<CustomToolTip/>}
           unit={unit}
         />
-          {/* formatter={(value, name, props) => [`${value} ${unit}`,]}
-          labelFormatter={(value) => formatTime(value)}
-        /> */}
         <XAxis
           dataKey="createdAt"
           scale="time"
           type="number"
           domain={['dataMin', 'dataMax']}
           interval="preserveStartEnd"
-          tickFormatter={unixtime => formatDateTime(unixtime)}
+          tickFormatter={unixtime => formatShortDateTime(unixtime)}
           label={{ value: "Time (Date/HH:mm)", position: "insideBottom", offset: -8, fill:colors.base1 }}
           stroke={colors.base2}
           height={42}

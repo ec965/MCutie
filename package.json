@@ -24,5 +24,9 @@
     "concurrently": "^5.3.0",
     "nodemon": "^2.0.7",
     "prettier": "2.2.1"
+  },
+  "dependencies": {
+    "http": "0.0.1-security",
+    "ws": "^7.4.2"
   }
 }

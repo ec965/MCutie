@@ -1,5 +1,5 @@
 import React from 'react';
-import GenericChart from '../dashboard/chart';
+import GenericChart from '../data/chart';
 import {upperFirstLetter} from '../util.js';
 
 export const LiveChart = (props) => {

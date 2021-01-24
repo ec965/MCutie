@@ -16,8 +16,9 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 const server = http.createServer(app);
+// create the websocket server
 const wss = new WebSocket.Server({server: server, path: "/live" });
-routes.wss(wss);
+routes.wss(wss); // apply wss callbacks defined in routes/ws.js
 
 
 db.sequelize.sync({force:false})

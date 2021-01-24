@@ -31,3 +31,19 @@ export const colors={
   cyan:     '#2aa198',
   green:    '#859900',
 }
+
+// Do/HH:mm
+export const formatShortDateTime = (unixtime) => {
+  const time = new Date(unixtime);
+  return `${time.getDate()}/${time.getHours()}:${time.getMinutes()}`;
+}
+// MM/DD HH:mm:ss
+export const formatDateTime = (unixtime) => {
+  const time = new Date(unixtime);
+  return `${time.getMonth()+1}/${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+}
+
+export const formatFullDateTime = (unixtime) => {
+  const time = new Date(unixtime);
+  return `${time.getMonth()+1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+}

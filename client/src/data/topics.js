@@ -5,6 +5,8 @@ import {
 } from "react-router-dom";
 import {URL, GETMSG, upperFirstLetter} from "../util.js";
 import GenericChart from "./chart.js";
+import {Column} from "../components/layout.js";
+import DataTable from './table.js';
 
 export const TableOfTopics = (props) => {
 
@@ -50,11 +52,18 @@ export const TopicChart = (props) => {
 
 
   return (
-    <GenericChart
-      topic={props.topic}
-      unit={unit}
-      label={label}
-      data={data}
-    />
+    <Column>
+      <GenericChart
+        topic={props.topic}
+        unit={unit}
+        label={label}
+        data={data}
+      />
+      <DataTable 
+        data={data}
+        unit={unit}
+        label={label}
+      />
+    </Column>
   );
 };

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Table, TableHead, TableRow, TableItem} from "../components/table.js";
 import qs from "querystring";
 import { URL, GETTOPICS } from '../util.js';
+import Switch from '../components/switch.js';
 
 const LiveTopics = (props) => {
   const [toggleDel, setToggleDel] = useState(false);
@@ -32,6 +33,9 @@ const LiveTopics = (props) => {
       .then(() => setRefetch(!refetch))
       .catch((err) => console.log(err));
   }
+  const handleSwitch = (event) => {
+    setToggleDel(event.target.checked);
+  }
 
   const rows = topics.map((r,i) => {
     return(
@@ -39,23 +43,24 @@ const LiveTopics = (props) => {
         <TableItem className="link" onClick={props.onClick} id={r.topic}>
           {r.topic}
         </TableItem>
-        {toggleDel && 
-          <TableItem onClick={handleDelete} id={r.topic}>
-            <i class="fas fa-times"></i>
-          </TableItem>
-        }
+        <TableItem>
+          <i 
+            onClick={handleDelete} 
+            name={r.topic}
+            id={r.topic} 
+            className={"fas fa-times " + (toggleDel && "link")}
+          />
+        </TableItem>
       </TableRow>
     );
   });
   return(
     <Table>
       <TableRow>
-        <TableHead>Live Topics</TableHead>
-        {toggleDel && 
-          <TableHead>
-            <i class="far fa-trash-alt"></i>
-          </TableHead>
-        }
+        <TableHead>Live Graph</TableHead>
+        <TableHead>
+          <Switch onClick={handleSwitch} className="table-switch"/>
+        </TableHead>
       </TableRow>
       {rows}
     </Table>

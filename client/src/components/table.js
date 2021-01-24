@@ -17,7 +17,7 @@ export const TableHead = (props) => {
 }
 
 export const TableItem = (props) => {
-  return(<td onClick={props.onClick} id={props.id} className={"table-item " + props.className}>{props.children}</td>);
+  return(<td name={props.name} onClick={props.onClick} id={props.id} className={"table-item " + props.className}>{props.children}</td>);
 }
 
 export const TableRow = (props) => {

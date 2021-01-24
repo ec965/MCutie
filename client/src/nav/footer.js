@@ -11,7 +11,7 @@ const Footer = (props) => {
         </a>
       </Column>
       <a href="https://github.com/ec965/mcutie">
-        <i class="fab fa-github"></i>
+        <i className="fab fa-github"></i>
       </a>
     </footer>
   )

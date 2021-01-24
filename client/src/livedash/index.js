@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import TableOfSubs from "../dashboard/subs";
+import TableOfSubs from "./subs";
 import {Row, Column} from "../components/layout.js";
 import Page from '../components/page.js';
-import {WEBSOCKET, URL, GETTOPICS } from '../util';
+import {WEBSOCKET} from '../util';
 import LiveTopics from './table.js';
 import LivePublisher from './publisher.js';
 import LiveChart from './chart.js';

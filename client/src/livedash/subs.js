@@ -3,6 +3,8 @@ import {Table, TableHead, TableRow, TableItem} from "../components/table.js";
 import {Form, FormItem, FormButton} from "../components/form.js";
 import {URL, GETSUB} from "../util.js";
 import qs from "querystring";
+import Switch from '../components/switch.js';
+import {Row, Column} from '../components/layout.js';
 
 const TableOfSubs = (props) => {
   const [toggleDel, setToggleDel] = useState(false);
@@ -47,19 +49,25 @@ const TableOfSubs = (props) => {
   }
 
   const handleDelete = (event) => {
-    const reqOpt = {
-      method: "DELETE",
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: qs.stringify({topic:event.target.id})
+    if (toggleDel){
+      const reqOpt = {
+        method: "DELETE",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: qs.stringify({topic:event.target.id})
+      }
+      fetch(URL+GETSUB, reqOpt)
+        .then((res)=>{
+          if(!res.ok){
+            throw new Error(res.status);
+          } else return res;
+        })
+        .then(() => setRefetch(!refetch))
+        .catch((err) => console.log(err));
     }
-    fetch(URL+GETSUB, reqOpt)
-      .then((res)=>{
-        if(!res.ok){
-          throw new Error(res.status);
-        } else return res;
-      })
-      .then(() => setRefetch(!refetch))
-      .catch((err) => console.log(err));
+  }
+  
+  const handleSwitch = (event) => {
+    setToggleDel(event.target.checked);
   }
 
   const rows = subs.map((r, i) => {
@@ -67,29 +75,34 @@ const TableOfSubs = (props) => {
       <TableRow key={i}>
         <TableItem>{r["topic"]}</TableItem>
         <TableItem>{r["qos"]}</TableItem>
-        {toggleDel && 
-          <TableItem onClick={handleDelete} id={r.topic}><i class="fas fa-times"/></TableItem>
-        }
+        <TableItem>
+          <i 
+            onClick={handleDelete} 
+            name={r.topic}
+            id={r.topic} 
+            className={"fas fa-times " + (toggleDel && "link")}
+          />
+        </TableItem>
       </TableRow>
     );
   });
 
   return(
-    <>
+    <Column>
       <SubForm onSubmit={handleSubmit} onChange={handleChange}/>
-      <Table>
-        <TableRow>
-          <TableHead>Subscription</TableHead>
-          <TableHead>QoS</TableHead>
-          {toggleDel && 
+      <Row className="top">
+        <Table>
+          <TableRow>
+            <TableHead>Subscription</TableHead>
+            <TableHead>QoS</TableHead>
             <TableHead>
-              <i class="far fa-trash-alt"></i>
+              <Switch onClick={handleSwitch} className="table-switch"/>
             </TableHead>
-          }
-        </TableRow>
-        {rows}
-      </Table>
-    </>
+          </TableRow>
+          {rows}
+        </Table>
+      </Row>
+    </Column>
   );
 }
 

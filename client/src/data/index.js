@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Page from "../components/page.js";
 import {Column, Row} from "../components/layout.js";
-import TableOfSubs from "./subs.js";
 import {TopicChart, TableOfTopics} from "./topics.js";
 import {URL, GETTOPICS, url_replacement} from "../util.js";
 import {Route, Switch} from "react-router-dom";
@@ -30,22 +29,16 @@ const DashBoard = (props) => {
     );
   });
 
-
   return(
     <Page>
       <Column>
         <Row>
+          <TableOfTopics routeUrl={routeUrl} topics={topics}/>
+        </Row>
+        <Row>
           <Switch>
             {charts}
           </Switch>
-        </Row>
-        <Row className="top">
-          <Column>
-            <TableOfTopics routeUrl={routeUrl} topics={topics}/>
-            <TableOfSubs/>
-          </Column>
-        </Row>
-        <Row>
         </Row>
       </Column>
     </Page>
