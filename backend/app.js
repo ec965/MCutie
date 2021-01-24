@@ -3,17 +3,22 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");
+const http = require('http');
+const WebSocket = require('ws');
 
 const db = require("./models/index"); 
 const mqtt = require("./mqtt/index"); 
 const logger = require("./config/pino");
 const subscribeAll = require('./mqtt/sub');
+const routes = require("./route/index");
 
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-var expressWs = require("express-ws")(app);
-const routes = require("./route/index");
+const server = http.createServer(app);
+const wss = new WebSocket.Server({server: server, path: "/live" });
+routes.wss(wss);
+
 
 db.sequelize.sync({force:false})
 .then(subscribeAll(mqtt))
@@ -25,10 +30,11 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 // routes
-app.use("/live", routes.websocket);
+// app.use("/live", routes.websocket);
 app.use("/mqtt", routes.mqtt);
 
-app.listen(PORT, () => {
+// since we're using a websocket, listen on the server instead of the app
+server.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
 });
 
