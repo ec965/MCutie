@@ -15,6 +15,8 @@ const LiveDash = (props) => {
   const [rxData, setRxData] = useState([]);
   // current live topic to display on the chart
   const [liveTopic, setLiveTopic] = useState("");
+  // new topics
+  const [newTopics, setNewTopics] = useState([]);
 
   // states for live publisher form
   const [pubTopic, setPubTopic] = useState("");
@@ -32,11 +34,18 @@ const LiveDash = (props) => {
     
     ws.current.onmessage = (event) => {
       let data = JSON.parse(event.data);
-      for(let i=0; i<data.length; i++){
-        // parse date into unix time for chart
-        data[i]["createdAt"] = Date.parse(data[i]["createdAt"]);
+      console.log(data);
+      if (data.response === "data"){
+        for(let i=0; i<data.data.length; i++){
+          // parse date into unix time for chart
+          data.data[i]["createdAt"] = Date.parse(data.data[i]["createdAt"]);
+        }
+        setRxData(data.data);
+      } 
+      else if (data.response === "new topics"){
+        console.log(data.data);
+        setNewTopics(data.data);
       }
-      setRxData(data);
     }
 
     return () => {
@@ -95,7 +104,10 @@ const LiveDash = (props) => {
           }
         </Row>
         <Row>
-          <LiveTopics onClick={handleClick}/>
+          <LiveTopics 
+            onClick={handleClick}
+            newTopics={newTopics}
+          />
         </Row>
         <Row className="top space">
           <Row>

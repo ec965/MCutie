@@ -3,7 +3,7 @@ import {Table, TableHead, TableRow, TableItem} from "../components/table.js";
 import {Form, FormItem, FormButton} from "../components/form.js";
 import {URL, GETSUB} from "../util.js";
 import qs from "querystring";
-import Switch from '../components/switch.js';
+import Toggle from '../components/toggle.js';
 import {Row, Column} from '../components/layout.js';
 
 const TableOfSubs = (props) => {
@@ -66,7 +66,7 @@ const TableOfSubs = (props) => {
     }
   }
   
-  const handleSwitch = (event) => {
+  const handleToggle = (event) => {
     setToggleDel(event.target.checked);
   }
 
@@ -96,7 +96,7 @@ const TableOfSubs = (props) => {
             <TableHead>Subscription</TableHead>
             <TableHead>QoS</TableHead>
             <TableHead>
-              <Switch onClick={handleSwitch} className="table-switch"/>
+              <Toggle onClick={handleToggle} className="table-toggle"/>
             </TableHead>
           </TableRow>
           {rows}

@@ -25,7 +25,6 @@ const CustomToolTip = ({payload, label, active, unit}) => {
 }
 
 const GenericChart = (props) => {
-  console.log(props.data);
   const [width, setWidth] = useState(960);
   const [height, setHeight] = useState(540)
   const [data, setData] = useState([{message:1, createdAt:1}]);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Switch = (props) => {
+const Toggle = (props) => {
   return(
     <label className={"switch " + props.className}>
       <input type="checkbox" onClick={props.onClick}/>
@@ -8,4 +8,4 @@ const Switch = (props) => {
     </label>
   );
 }
-export default Switch;
+export default Toggle;

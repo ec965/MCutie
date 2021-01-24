@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Table, TableHead, TableRow, TableItem} from "../components/table.js";
 import qs from "querystring";
 import { URL, GETTOPICS } from '../util.js';
-import Switch from '../components/switch.js';
+import Toggle from '../components/toggle.js';
 
 const LiveTopics = (props) => {
   const [toggleDel, setToggleDel] = useState(false);
@@ -17,6 +17,13 @@ const LiveTopics = (props) => {
         setTopics(data);
       });
   }, [refetch]);
+
+  useEffect(() => {
+    if (props.newTopics.length !== 0){
+      setTopics(props.newTopics);
+    }
+    console.log(props.newTopics);
+  }, [props.newTopics]);
 
   const handleDelete = (event) =>{
     const reqOpt = {
@@ -59,7 +66,7 @@ const LiveTopics = (props) => {
       <TableRow>
         <TableHead>Live Graph</TableHead>
         <TableHead>
-          <Switch onClick={handleSwitch} className="table-switch"/>
+          <Toggle onClick={handleSwitch} className="table-toggle"/>
         </TableHead>
       </TableRow>
       {rows}

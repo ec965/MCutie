@@ -15,9 +15,18 @@ module.exports = (wss) => {
           }
         })
           .then((msgs) => {
-            ws.send(JSON.stringify(msgs));
+            ws.send(JSON.stringify({response:"data", data:msgs}));
           })
           .catch((e) => logger.error("Error sending messages on Websocket: " + e));
+        
+        db.sequelize.query("SELECT DISTINCT topic FROM `msgs`")
+          .then(([topics,metadata]) => {
+            ws.send(JSON.stringify({response: "new topics", data:topics}));
+          })
+          .catch((e) => {
+            logger.error("Error sending new topics on Websocket: ", e);
+          });
+
       }
     }, 1000);
 

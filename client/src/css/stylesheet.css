@@ -174,7 +174,7 @@ table, tbody {
   justify-content: space-between;
 }
 
-/*-----SWITCH-----*/
+/*-----TOGGLE-----*/
 
 .switch {
   position:relative;
@@ -216,20 +216,20 @@ table, tbody {
   transform: translateX(24px);
 }
 
-.table-switch{
+.table-toggle{
   width:32px;
   height:16px;
   margin-right:40px;
 }
-.table-switch .slider{
+.table-toggle .slider{
   width:32px;
   height:16px;
 }
-.table-switch .slider:before{
+.table-toggle .slider:before{
   width:16px;
   height:16px;
 }
-.table-switch input:checked + .slider:before{
+.table-toggle input:checked + .slider:before{
   transform: translateX(16px);
 }
 
