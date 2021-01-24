@@ -1,3 +1,5 @@
 # Frontend
 
-![workInProgress](./wip.png)
+![livedash](./pictures/livedash.png)
+![livegraph](./pictures/livegraph.png)
+![data](./pictures/chart.png)

@@ -25,7 +25,7 @@ const MyNavBar = (props) => {
             </Link>
           </NavItem>
         </NavGroup>
-        <NavGroup>
+        {/* <NavGroup>
           <h1>h1</h1>
           <h2>h2</h2>
           <h3>h3</h3>
@@ -33,7 +33,7 @@ const MyNavBar = (props) => {
           <h5>h5</h5>
           <h6>h6</h6>
           <p>p</p>
-        </NavGroup>
+        </NavGroup> */}
       </NavBar>
 
       <Switch>

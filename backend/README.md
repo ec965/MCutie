@@ -5,6 +5,17 @@ The server also manages a REST API to view logged MQTT msgs and can update subsc
 
 For `POST` and `DELETE` requests, use the x-www-form-urlencoded content policy.
 
+## Using .env
+A sample .env file has been included in this repository.
+* DB_HOST: database host, the intended database is sqlite3 
+* MQTT_BROKER: mqtt broker, this app is intended to be run on the same machine as your broker.
+* MQTT_CLIENTID: mqtt client id, pick something unique
+* MQTT_USERNAME/MQTT_PASSWORD: if you have certification set up on your mqtt broker, put your username/password here.
+* MQTT_FLOAT_RES: For floating point incoming data, checks the data against the rule: (PreviousData - CurrentData > FloatResoltuion) ? addToDataBase : dontAddToDataBase
+* MQTT_INT_RES: For integer incoming data, checks the data against the rule: (PreviousData - CurrentData > IntResoltuion) ? addToDataBase : dontAddToDataBase
+* LOGLEVEL: log level, most stuff is on debug, anything breaking will be on info and below.
+* PORT: port to run the server on.
+
 ## API Reference
 ## `GET`
 ### `/mqtt/t`

@@ -6,8 +6,8 @@ const subscribeAll = require('./sub');
 const Broker = process.env.MQTT_BROKER || "mqtt://localhost:1883";
 var connOpts = {
   clientId: process.env.MQTT_CLIENTID || "mcutie-0",
-  username: process.env.MQTT_USERNAME || "test",
-  password: process.env.MQTT_PASSWORD || "test123",
+  username: process.env.MQTT_USERNAME || "",
+  password: process.env.MQTT_PASSWORD || "",
 };
 
 // connect mqtt client
