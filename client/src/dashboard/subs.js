@@ -96,7 +96,7 @@ const TableOfSubs = (props) => {
 const SubForm = (props) =>{
   return(
     <Form onSubmit={props.onSubmit}>
-      <h3>Subscriber</h3>
+      <h3>Subscribe</h3>
       <FormItem type="text" onChange={props.onChange} name="sub">
         Topic
       </FormItem>

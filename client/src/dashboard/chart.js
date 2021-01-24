@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -37,7 +37,7 @@ const CustomToolTip = ({payload, label, active, unit}) => {
 const GenericChart = (props) => {
   const [width, setWidth] = useState(960);
   const [height, setHeight] = useState(540)
-  const ref = useRef(null);
+  const [data, setData] = useState([]);
   const margin = 15;
   const unit = props.unit;
 
@@ -50,15 +50,22 @@ const GenericChart = (props) => {
       setWidth(256);
       setHeight(144);
     }
-  },[]);
+
+    for (let i=0; i<props.data.length; i++){
+      props.data[i].message = parseFloat(props.data[i].message);
+    }
+    setData(props.data); // we need to rerender the component every time props.data changes
+  },[props.data]);
+
+
 
   return (
     <div className="chart">
       <h2>{props.topic}</h2>
-      <LineChart width={width} height={height} data={props.data}
+      <LineChart width={width} height={height} data={data}
         margin={{top:margin, bottom: margin, left: margin, right: margin}}>
         <Line 
-          type="monotone" 
+          type="linear" 
           dataKey="message" 
           dot={false} 
           stroke={colors.magenta} 
@@ -77,16 +84,19 @@ const GenericChart = (props) => {
           scale="time"
           type="number"
           domain={['dataMin', 'dataMax']}
+          interval="preserveStartEnd"
           tickFormatter={unixtime => formatDateTime(unixtime)}
           label={{ value: "Time (Date/HH:mm)", position: "insideBottom", offset: -8, fill:colors.base1 }}
           stroke={colors.base2}
           height={42}
+          allowDataOverflow={false}
         />
         <YAxis
-          type="number"
-          domain={[0, 'dataMax + 2']}
           label={{ value: `${props.label} (${props.unit})`, position: "insideLeft", angle: -90, fill:colors.base1}}
           stroke={colors.base2}
+          dataKey="message"
+          type="number"
+          interval={0}
         />
       </LineChart>
     </div>

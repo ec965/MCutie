@@ -25,19 +25,19 @@ const router = express.Router();
 router.ws('/', (ws, req) => {
   var liveTopic;
 
-  // setInterval(()=>{
-  //   if (liveTopic && ws.readyState === ws.OPEN){
-  //     db.Msg.findAll({
-  //       where: {
-  //         topic:liveTopic
-  //       }
-  //     })
-  //       .then((msgs) => {
-  //         ws.send(JSON.stringify(msgs));
-  //       })
-  //       .catch((e) => logger.error("Error sending messages on Websocket: " + e));
-  //   }
-  // }, 1000);
+  setInterval(()=>{
+    if (liveTopic && ws.readyState === ws.OPEN){
+      db.Msg.findAll({
+        where: {
+          topic:liveTopic
+        }
+      })
+        .then((msgs) => {
+          ws.send(JSON.stringify(msgs));
+        })
+        .catch((e) => logger.error("Error sending messages on Websocket: " + e));
+    }
+  }, 1000);
 
   ws.on('message', (msg) => {
     try{

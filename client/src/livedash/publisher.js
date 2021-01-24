@@ -4,7 +4,7 @@ import {Form, FormItem, FormButton} from '../components/form.js';
 const LivePublisher = (props) =>{
   return(
     <Form onSubmit={props.onSubmit}>
-      <h3>Publisher</h3>
+      <h3>Publish</h3>
       <FormItem type='text' onChange={props.onChange} name="topic">
         Topic
       </FormItem>

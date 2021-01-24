@@ -9,7 +9,6 @@ import LiveChart from './chart.js';
 
 
 const LiveDash = (props) => {
-  const [isPaused, setPause] = useState(false);
   const ws = useRef(null);
 
   // data coming in on the web socket
@@ -30,19 +29,8 @@ const LiveDash = (props) => {
     ws.current.onclose = () => {
       console.log("websocket closed");
     }
-
-    return () => {
-      ws.current.close();
-    };
-
-  }, []); 
-
-  useEffect(()=>{
-    if (!ws.current) return;
-
+    
     ws.current.onmessage = (event) => {
-      if (isPaused) return;
-
       let data = JSON.parse(event.data);
       for(let i=0; i<data.length; i++){
         // parse date into unix time for chart
@@ -50,7 +38,12 @@ const LiveDash = (props) => {
       }
       setRxData(data);
     }
-  }, [isPaused]);
+
+    return () => {
+      ws.current.close();
+    };
+
+  }, []); 
 
   // handle submit on live publisher
   const handlePublish = (event) => {

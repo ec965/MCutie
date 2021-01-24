@@ -3,14 +3,14 @@ MCutie provides a web client and API to interface with MQTT devices.
 
 MCutie should run concurrently with an MQTT broker such as mosquitto.
 
-## Backend
+## [Backend](./backend/README.md)
 * Express.js
 * SQLite3
 
 ### todo
 2. websocket livestream
 
-## Frontend
+## [Frontend](./client/README.md)
 * React.js
 
 ### todo
