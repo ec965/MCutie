@@ -42,8 +42,9 @@ export const TopicChart = (props) => {
     fetch(URL + GETMSG + props.topic)
       .then((response) => response.json())
       .then((data) => {
-        for(let i=0; i<data.length; i++){
-          data[i]["createdAt"] = Date.parse(data[i]["createdAt"]);
+        for (let i=0; i<data.length; i++){
+          data[i].message = parseFloat(data[i].message);
+          data[i].createdAt = Date.parse(data[i].createdAt);
         }
         setData(data);
         // console.log(JSON.stringify(data, null , 2));

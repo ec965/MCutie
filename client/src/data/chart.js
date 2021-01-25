@@ -27,7 +27,6 @@ const CustomToolTip = ({payload, label, active, unit}) => {
 const GenericChart = (props) => {
   const [width, setWidth] = useState(960);
   const [height, setHeight] = useState(540)
-  const [data, setData] = useState([{message:1, createdAt:1}]);
   const margin = 15;
   const unit = props.unit;
 
@@ -40,19 +39,12 @@ const GenericChart = (props) => {
       setWidth(256);
       setHeight(144);
     }
-
-    for (let i=0; i<props.data.length; i++){
-      props.data[i].message = parseFloat(props.data[i].message);
-    }
-    setData(props.data); // we need to rerender the component every time props.data changes
-  },[props.data]);
-
-
+  });
 
   return (
     <div className="chart">
       <h2>{props.topic}</h2>
-      <LineChart width={width} height={height} data={data}
+      <LineChart width={width} height={height} data={props.data}
         margin={{top:margin, bottom: margin, left: margin, right: margin}}>
         <Line 
           type="linear" 

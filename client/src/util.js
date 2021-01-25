@@ -49,3 +49,11 @@ export const formatFullDateTime = (unixtime) => {
   const time = new Date(unixtime);
   return `${time.getMonth()+1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
 }
+
+export const usePrevious = (value) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}

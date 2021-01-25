@@ -1,35 +1,36 @@
 const db = require("../models/index");
 const logger = require('../config/pino');
-var newMsg = require('./newMsg');
 
 // set to 0 to match values
 // set to -1 to let all values through
 const FloatResoltuion = process.env.MQTT_FLOAT_RES || 0.1;
 const IntResolution = process.env.MQTT_INT_RES || 1;
 
+var LastMsg; // save the last message for comparison to the current message
+
 const onMessage = async (topic, message) => {
+  
   topic = String(topic);
-  message = String(message); // messages can come in as bytes, but we want chars
+  message = String(message); // messages can come in as byte arrays, but we want strings 
   logger.debug("[MQTT] RX: " + topic + ": " + message);
 
   // check the last message against the new message, only add the new message if it passes the resolution test.
-  lastMsg = await db.Msg.findOne({
-    where: {
-     topic: topic 
-    },
-    order: db.sequelize.literal("id Desc"),
-    limit: 1,
-  })
-
-  if (lastMsg !== null){ // null means there's nothing in the database
-    if ( ! checkDataResolution(lastMsg.message, message, FloatResoltuion, IntResolution)) {
+  if ( LastMsg !== undefined && LastMsg !== null){
+    if ( ! checkDataResolution(LastMsg.message, message, FloatResoltuion, IntResolution)) {
       logger.debug("Last mqtt msg didn't pass resolution test.");
       return;
     }
+  } else { // load the last message on startup
+    LastMsg = await db.Msg.findOne({
+      where: {
+        topic: topic 
+      },
+      order: db.sequelize.literal("id Desc"),
+      limit: 1,
+    })
   }
 
   logger.debug("Saving last mqtt msg to database.");
-  newMsg[0] = true;
   await db.Msg.create({message: message, topic: topic});
 }
 

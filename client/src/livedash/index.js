@@ -5,124 +5,147 @@ import Page from '../components/page.js';
 import {WEBSOCKET} from '../util';
 import LiveTopics from './table.js';
 import LivePublisher from './publisher.js';
-import LiveChart from './chart.js';
 
+class LiveDash extends React.Component {
 
-const LiveDash = (props) => {
-  const ws = useRef(null);
+  constructor() {
+    super();
+    this.state = {};
+  }
+  ws = new WebSocket(WEBSOCKET);
 
-  // data coming in on the web socket
-  const [rxData, setRxData] = useState([]);
-  // current live topic to display on the chart
-  const [liveTopic, setLiveTopic] = useState("");
-  // new topics
-  const [newTopics, setNewTopics] = useState([]);
-
-  // states for live publisher form
-  const [pubTopic, setPubTopic] = useState("");
-  const [pubMsg, setPubMsg] = useState("");
-  const [pubQos, setPubQos] = useState(0);
-
-  // websocket stuff
-  useEffect(()=>{
-    ws.current = new WebSocket(WEBSOCKET);
-    ws.current.onopen = () => {
+  componentDidMount(){
+    this.ws.onopen = () => {
       console.log("websocket connected");
     }
-    ws.current.onclose = () => {
+    this.ws.onclose = () => {
       console.log("websocket closed");
     }
-    
-    ws.current.onmessage = (event) => {
-      let data = JSON.parse(event.data);
-      // check the reponse to see what we need to parse for
-      if (data.response === "data"){
-        for(let i=0; i<data.data.length; i++){
-          // parse date into unix time for chart
-          data.data[i]["createdAt"] = Date.parse(data.data[i]["createdAt"]);
-        }
-        setRxData(data.data);
-      } 
-      else if (data.response === "new topics"){
-        setNewTopics(data.data);
-      }
-    }
-
-    return () => {
-      ws.current.close();
-    };
-
-  }, []); 
-
-  // handle submit on live publisher
-  const handlePublish = (event) => {
-    event.preventDefault();
-    if (!ws.current) return;
-
-    if (ws.current.readyState === ws.current.OPEN){
-      var txData = (JSON.stringify(
-        {
-          request: "publish",
-          topic: pubTopic,
-          message: pubMsg,
-          qos: pubQos,
-        }
-      ));
-      ws.current.send(txData);
-    }
   }
 
-  // handle change on live publisher input fields
-  const handleChange = (event) => {
-    if(event.target.name === "topic") setPubTopic(event.target.value);
-    if(event.target.name === "message") setPubMsg(event.target.value);
-    if(event.target.name === "qos") setPubQos(event.target.value);
+  componentWillUnmount(){
+    this.ws.close();
   }
 
-  // handle click on live topics table
-  const handleClick = (event) => {
-    if (! ws.current) return;
-
-    if (ws.current.readyState === ws.current.OPEN){
-      setLiveTopic(event.target.id);
-      var txData = (JSON.stringify(
-        {
-          request:"live",
-          topic: event.target.id
-        }
-      ));
-      ws.current.send(txData);
-    }
-  }
-
-  return(
-    <Page>
-      <Column>
-        <Row>
-          {liveTopic && 
-            <LiveChart topic={liveTopic} data={rxData}/>
-          }
-        </Row>
-        <Row>
-          <LiveTopics 
-            onClick={handleClick}
-            newTopics={newTopics}
-          />
-        </Row>
-        <Row className="top space">
+  render(){
+    return(
+      <Page>
+        <Column>
           <Row>
-            <LivePublisher
-              onSubmit={handlePublish}
-              onChange={handleChange}
-            />
+            <LiveTopics ws={this.ws}/>
           </Row>
-          <Column className="top">
-            <TableOfSubs/>
-          </Column>
-        </Row>
-      </Column>
-    </Page>
-  );
+          <Row className="top space">
+            <Row>
+              <LivePublisher ws={this.ws}/>
+            </Row>
+            <Column className="top">
+              <TableOfSubs/>
+            </Column>
+          </Row>
+        </Column>
+      </Page>
+    );
+  }
+
 }
+// const LiveDash = (props) => {
+//   const ws = useRef(null);
+
+//   // data coming in on the web socket
+//   const [newData, setNewData] = useState();
+//   // new topics
+//   const [newTopic, setNewTopic] = useState();
+//   // current live topic to display on the chart
+//   const [liveTopic, setLiveTopic] = useState("");
+
+//   // states for live publisher form
+//   const [pubTopic, setPubTopic] = useState("");
+//   const [pubMsg, setPubMsg] = useState("");
+//   const [pubQos, setPubQos] = useState(0);
+
+//   // websocket stuff
+//   useEffect(()=>{
+//     ws.current = new WebSocket(WEBSOCKET);
+//     ws.current.onopen = () => {
+//       console.log("websocket connected");
+//     }
+//     ws.current.onclose = () => {
+//       console.log("websocket closed");
+//     }
+    
+//     // ws.current.onmessage = (event) => {
+//     //   let data = JSON.parse(event.data);
+
+//     //   if (data.request === "newdata"){
+//     //     setNewData(data.payload);
+//     //   } 
+//     //   else if (data.request === "newtopic"){
+//     //     setNewTopic(data.payload);
+//     //   }
+//     // }
+
+//     return () => {
+//       ws.current.close();
+//     };
+
+//   }, []); 
+
+//   // handle submit on live publisher
+//   const handlePublish = (event) => {
+//     event.preventDefault();
+//     if (!ws.current) return;
+
+//     if (ws.current.readyState === ws.current.OPEN){
+//       var txData = (JSON.stringify(
+//         {
+//           request: "publish",
+//           payload:{
+//             topic: pubTopic,
+//             message: pubMsg,
+//             qos: pubQos,
+//           }
+//         }
+//       ));
+//       ws.current.send(txData);
+//     }
+//   }
+
+//   // handle change on live publisher input fields
+//   const handleChange = (event) => {
+//     if(event.target.name === "topic") setPubTopic(event.target.value);
+//     if(event.target.name === "message") setPubMsg(event.target.value);
+//     if(event.target.name === "qos") setPubQos(event.target.value);
+//   }
+
+
+//   return(
+//     <Page>
+//       <Column>
+//         <Row>
+//           {liveTopic && 
+//             <LiveChart topic={liveTopic} socket={ws.current}/>
+//           }
+//         </Row>
+//         <Row>
+//           <LiveTopics 
+//             onClick={handleClick}
+//             newTopics={newTopic}
+//           />
+//         </Row>
+//         <Row className="top space">
+//           <Row>
+//             <LivePublisher
+//               onSubmit={handlePublish}
+//               onChange={handleChange}
+//             />
+//           </Row>
+//           <Column className="top">
+//             <TableOfSubs/>
+//           </Column>
+//         </Row>
+//       </Column>
+//     </Page>
+//   );
+// }
 
 export default LiveDash;
