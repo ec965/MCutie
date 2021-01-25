@@ -7,7 +7,6 @@ const mqttEmitter = require('./event');
 const FloatResoltuion = process.env.MQTT_FLOAT_RES || 0.1;
 const IntResolution = process.env.MQTT_INT_RES || 1;
 
-var LastMsg; // save the last message for comparison to the current message
 
 const onMessage = async (topic, message) => {
   
@@ -15,20 +14,20 @@ const onMessage = async (topic, message) => {
   message = String(message); // messages can come in as byte arrays, but we want strings 
   logger.debug("[MQTT] RX: " + topic + ": " + message);
 
+  const lastMsg = await db.Msg.findOne({
+    where: {
+      topic:topic
+    },
+    order: db.sequelize.literal('id DESC'),
+    limit:1
+  });
+
   // check the last message against the new message, only add the new message if it passes the resolution test.
-  if ( LastMsg !== undefined && LastMsg !== null){
-    if ( ! checkDataResolution(LastMsg.message, message, FloatResoltuion, IntResolution)) {
+  if ( lastMsg !== undefined && lastMsg !== null){
+    if ( ! checkDataResolution(lastMsg.message, message, FloatResoltuion, IntResolution)) {
       logger.debug("Last mqtt msg didn't pass resolution test.");
       return;
     }
-  } else { // load the last message on startup
-    LastMsg = await db.Msg.findOne({
-      where: {
-        topic: topic 
-      },
-      order: db.sequelize.literal("id Desc"),
-      limit: 1,
-    })
   }
 
   logger.debug("Saving last mqtt msg to database.");

@@ -10,7 +10,6 @@ const LiveTopics = (props) => {
   const [toggleDel, setToggleDel] = useState(false);
   // topics for the live topic table
   const [topics, setTopics] = useState([]);
-  const [refetch, setRefetch] = useState(true);
   const [liveTopic, setLiveTopic] = useState("");
   const [chartData, setChartData] = useState([]);
   
@@ -47,19 +46,22 @@ const LiveTopics = (props) => {
 
   // delete topics & it's msgs from the database
   const handleDelete = (event) =>{
-    const reqOpt = {
-      method: "DELETE",
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: qs.stringify({topic:event.target.id})
+    if (toggleDel){
+      const reqOpt = {
+        method: "DELETE",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: qs.stringify({topic:event.target.id})
+      }
+      fetch(URL+GETTOPICS, reqOpt)
+        .then((res)=>{
+          if(!res.ok){
+            throw new Error(res.status);
+          } else return res;
+        })
+        .then(() => props.ws.send(JSON.stringify({request:'delete'})))
+        .catch((err) => console.log(err));
+      // after deletion, we need to force the local data array to reset
     }
-    fetch(URL+GETTOPICS, reqOpt)
-      .then((res)=>{
-        if(!res.ok){
-          throw new Error(res.status);
-        } else return res;
-      })
-      .then(() => setRefetch(!refetch)) // refetch topics after a deletion
-      .catch((err) => console.log(err));
   }
 
   // toggle allow deletion on the client

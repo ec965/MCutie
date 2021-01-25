@@ -38,7 +38,6 @@ module.exports = (wss) => {
     var prevLiveTopic;
     
     mqttEmitter.on("MQTTRX", () => {
-      console.log("new event");
       if (ws.readyState === ws.OPEN){
         db.sequelize.query("SELECT DISTINCT topic FROM `msgs`")
           .then( ([topics, metadata]) => {
@@ -102,6 +101,9 @@ module.exports = (wss) => {
             })
             .catch((e)=> logger.error("Error checking topic at websocket: " + e));
 
+          }
+          if (msgjson.request === 'delete'){
+            mqttEmitter.emit('MQTTRX');
           }
         }
       } catch(e) {
