@@ -32,7 +32,7 @@ const onMessage = async (topic, message) => {
 
   logger.debug("Saving last mqtt msg to database.");
   await db.Msg.create({message: message, topic: topic});
-  mqttEmitter.emit('MQTTRX');
+  mqttEmitter.emit('MQTTRX'); // notify the websocket that a new message has been added to the db
 }
 
 
