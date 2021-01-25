@@ -15,6 +15,7 @@ MCutie should run concurrently with an MQTT broker such as mosquitto.
 3. Set up the MQTT broker `sudo apt install mosquitto`.
     * You should [enable passwords and users](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-ubuntu-16-04).
 4. Change `./backend/.env` to reflect the credentials of the broker.
+5. Install sqlite3: `sudo apt-get install sqlite3`.
 5. Change `./client/src/util.js` to reflect credentials of the Raspberry Pi.
 6. Rebuild the client: `cd client` then `npm run build`.
 7. Launch the App from the root directory with `npm run prod`.
