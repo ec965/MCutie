@@ -1,3 +1,4 @@
+
 import {useRef, useEffect} from 'react';
 
 export const upperFirstLetter = (str) => {
@@ -9,11 +10,14 @@ export const url_replacement = (str) => {
   return str.replaceAll("/", "_").replaceAll("%",'-');
 }
 
-export const URL = "http://localhost:5000/";
+// api routes
+const IPADDRESS = '192.168.1.30';
+const PORT = '5000';
+export const URL = `http://${IPADDRESS}:${PORT}/`;
 export const GETTOPICS = "mqtt/t";
 export const GETMSG = "mqtt/m?topic=";
 export const GETSUB = "mqtt/s";
-export const WEBSOCKET="ws://localhost:5000/live"
+export const WEBSOCKET=`ws://${IPADDRESS}:${PORT}/live`;
 
 
 export const colors={

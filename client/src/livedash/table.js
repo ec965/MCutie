@@ -3,7 +3,7 @@ import {Table, TableHead, TableRow, TableItem} from "../components/table.js";
 import qs from "querystring";
 import { URL, GETTOPICS, usePrevious } from '../util.js';
 import Toggle from '../components/toggle.js';
-import {Row, Column} from '../components/layout';
+import {Column} from '../components/layout';
 import LiveChart from './chart';
 
 const LiveTopics = (props) => {
@@ -25,9 +25,6 @@ const LiveTopics = (props) => {
         // check if the topics line up, if they don't, reset the chart data
         var newChartData = [];
 
-        console.log("prev: ", prevTopic);
-        console.log("current: ", liveTopic); 
-
         if (liveTopic === prevTopic){
           newChartData = [...chartData];
         }
@@ -38,7 +35,6 @@ const LiveTopics = (props) => {
           messages[i].createdAt = Date.parse(messages[i].createdAt);
           newChartData.push(messages[i]);
         }
-        console.log(newChartData);
         setChartData(newChartData);
       }
     }

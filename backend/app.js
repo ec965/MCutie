@@ -13,6 +13,7 @@ const subscribeAll = require('./mqtt/sub');
 const routes = require("./route/index");
 
 const PORT = process.env.PORT || 5000;
+const IPADDRESS = process.env.IPADDRESS || 'localhost';
 
 const app = express();
 const server = http.createServer(app);
@@ -35,8 +36,8 @@ app.use(bodyParser.json());
 app.use("/mqtt", routes.mqtt);
 
 // since we're using a websocket, listen on the server instead of the app
-server.listen(PORT, () => {
-  console.log(`Listening at http://localhost:${PORT}`);
+server.listen(PORT, IPADDRESS,() => {
+  console.log(`Listening at http://${IPADDRESS}:${PORT}`);
 });
 
 // handle exit
