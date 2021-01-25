@@ -64,6 +64,7 @@ The default color scheme is based on [Solarized Dark](https://en.wikipedia.org/w
 
 # Backend Server
 * SQlite3
+* Sequelize
 * Express.js
 
 The server is an MQTT client. The server listens on subscribed topics and records those messages to an SQLite3 database.
@@ -217,7 +218,7 @@ A typical websocket connection will happen in the following fashion:
 
 ### Client wants to publish data
 Client sends:
-```json
+```javascript
 {
   request: "publish",
   payload: {
@@ -231,7 +232,7 @@ Server sends message over MQTT.
 
 ### Client requests data fro a live topic
 To start receiving live data, the Client sends:
-```json
+```javascript
 {
   request: "live",
   payload: {
@@ -241,7 +242,7 @@ To start receiving live data, the Client sends:
 ```
 
 Server sends data for the live topic and will continue to send data for that live topic until a new live topic is chosen.
-```json
+```javascript
 {
   request: "newdata",
   payload:[{
@@ -260,7 +261,7 @@ Server sends data for the live topic and will continue to send data for that liv
 
 ### Server wants to update the clients topic list
 Server sends the json. This is unprompted and will happen anytime the server detects a new topic in the database.
-```json
+```javascript
 {
   request: "newtopic",
   payload: [{topic: "newtopic"}, {topic: "newtopic2"}]
