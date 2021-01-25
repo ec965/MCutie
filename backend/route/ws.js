@@ -2,6 +2,7 @@ const logger = require("../config/pino");
 const mqtt = require("../mqtt/index");
 const db = require("../models/index");
 const { Op } = require("sequelize");
+const mqttEmitter = require("../mqtt/event");
 
 //packets sent from server
 /*
@@ -32,7 +33,12 @@ module.exports = (wss) => {
 
     // send new topics to the client
     var previousTopics = ""; // saves previous topics to check before sending to client
-    var sendNewTopic = setInterval(() => {
+    var liveTopic;
+    var prevMsgId = 0;
+    var prevLiveTopic;
+    
+    mqttEmitter.on("MQTTRX", () => {
+      console.log("new event");
       if (ws.readyState === ws.OPEN){
         db.sequelize.query("SELECT DISTINCT topic FROM `msgs`")
           .then( ([topics, metadata]) => {
@@ -48,48 +54,38 @@ module.exports = (wss) => {
             previousTopics = JSON.stringify(topics);
           })
           .catch((e) => logger.error("[DB] Error updating live topics: " + e));
-      } else {
-        clearInterval(sendNewTopic);
-      }
-    }, 1000);
-
-
-  // when the client requests a live topic, begin sending live topic data
-  var liveTopic;
-  var prevMsgId = 0;
-  var prevLiveTopic;
-  var sendLiveData = setInterval(()=>{
-    if (ws.readyState === ws.OPEN){
-      if (liveTopic){
-        if (liveTopic !== prevLiveTopic){
-          prevMsgId = 0;
-        }
-        db.Msg.findAll({
-          where: {
-            topic: liveTopic,
-            id: { [Op.gt]: prevMsgId},
-          },
-        })
-          .then((msgs)=>{
-            if (msgs.length > 0){
-              prevMsgId = parseInt(msgs[msgs.length-1].id);
-              logger.debug("[WS] sending new data on websocket.");
-              ws.send(JSON.stringify({response: 'newdata', payload: {topic: liveTopic, messages: msgs}}));
-            }
-          })
-          .catch((e) => logger.error("Error getting live msg from DB: " + e));
         
-        prevLiveTopic = liveTopic;
+
+        if (liveTopic){
+          if (liveTopic !== prevLiveTopic){
+            prevMsgId = 0;
+          }
+          db.Msg.findAll({
+            where: {
+              topic: liveTopic,
+              id: { [Op.gt]: prevMsgId},
+            },
+          })
+            .then((msgs)=>{
+              if (msgs.length > 0){
+                prevMsgId = parseInt(msgs[msgs.length-1].id);
+                logger.debug("[WS] sending new data on websocket.");
+                ws.send(JSON.stringify({response: 'newdata', payload: {topic: liveTopic, messages: msgs}}));
+              }
+            })
+            .catch((e) => logger.error("Error getting live msg from DB: " + e));
+          
+          prevLiveTopic = liveTopic;
+        }
+        
       }
-    } else {
-      clearInterval(sendLiveData);
-    }
-  }, 1000);
+    });
+    
+    mqttEmitter.emit('MQTTRX'); // force event on websocket init
 
     ws.on('message', (msg) => {
       try{
         var msgjson = JSON.parse(msg);
-        console.log(msgjson);
         if (typeof msgjson.request !== "undefined"){
           if (msgjson.request === "publish"){
             publish(msgjson);
@@ -99,6 +95,9 @@ module.exports = (wss) => {
             checkTopicExist(msgjson)
             .then((topic) => {
               liveTopic = topic;
+
+              mqttEmitter.emit('MQTTRX'); // force event on live topic update
+              
               logger.debug("Starting live topic");
             })
             .catch((e)=> logger.error("Error checking topic at websocket: " + e));

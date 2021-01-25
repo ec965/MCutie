@@ -1,5 +1,6 @@
 const db = require("../models/index");
 const logger = require('../config/pino');
+const mqttEmitter = require('./event');
 
 // set to 0 to match values
 // set to -1 to let all values through
@@ -32,6 +33,7 @@ const onMessage = async (topic, message) => {
 
   logger.debug("Saving last mqtt msg to database.");
   await db.Msg.create({message: message, topic: topic});
+  mqttEmitter.emit('MQTTRX');
 }
 
 
