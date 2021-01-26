@@ -4,7 +4,8 @@
   "description": "mqtt express server",
   "main": "src/index.js",
   "scripts": {
-    "start": "nodemon app.js --inspect"
+    "start": "nodemon app.js --inspect",
+    "prod": "node app.js --inspect"
   },
   "author": "ec965",
   "license": "MIT",

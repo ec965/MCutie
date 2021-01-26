@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "server": "npm start --prefix backend",
+    "server-prod": "npm run prod --prefix backend",
     "client": "npm start --prefix client",
     "client-prod": "npm run prod --prefix client",
     "start": "concurrently --kill-others \"npm run server\" \"npm run client\"",
-    "prod": "concurrently --kill-others \"npm run server\" \"npm run client-prod\"",
+    "prod": "concurrently --kill-others \"npm run server-prod\" \"npm run client-prod\"",
     "init": "npm install --prefix client && npm install --prefix backend && npm install"
   },
   "repository": {
