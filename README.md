@@ -32,23 +32,27 @@ MCutie should run concurrently with an MQTT broker such as mosquitto.
 2. Install Node and npm: `sudo apt install nodejs npm`
 5. Install sqlite3: `sudo apt install sqlite3`.
 3. Set up an MQTT broker like mosquitto: `sudo apt install mosquitto`.
-    * You should [enable passwords and users](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-ubuntu-16-04) for more security although on a local network this may not be necessary.
-    * The default port for MQTT is 1883.
+  * You should [enable passwords and users](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-ubuntu-16-04) for more security although on a local network this may not be necessary.
+  * The default port for MQTT is 1883.
 1. Clone this repository: `git clone https://github.com/ec965/MCutie.git && cd MCutie`
 4. Install the packages for the client, backend and root: `npm run init`
+5. At this point you should [set a static IP address](https://www.raspberrypi.org/documentation/configuration/tcpip/) on your Raspberry Pi so that it's IP address will not be abritraily changed in the future.
 5. Edit `./client/example.env` to reflect the credentials of the client server. Then change the name of `example.env` to `.env`: `mv exmaple.env .env`.
-    * A reference of the .env file is provided in this README at "[Using .env](#using-env)".
-    * The default port for HTTP is 80.
+  * A reference of the .env file is provided in this README at "[Using .env](#using-env)".
+  * The default port for HTTP is 80.
 4. Edit `./backend/example.env` to reflect the credentials of the broker and backend server. Then change the name of `example.env` to `.env`: `mv example.env .env`.
-    * A reference of the .env file is provided in this README at "[Using .env](#using-env-1)".
-    * I'm using port 5000 for development but any unreserved port is OK.
+  * A reference of the .env file is provided in this README at "[Using .env](#using-env-1)".
+  * I'm using port 5000 for development but any unreserved port is OK.
 5. Change `./client/src/util.js` to reflect credentials of the Raspberry Pi and API server.
-    * `const IPADDRESS` is the ip address of the Raspberry Pi.
-    * `const PORT` is the port of the backend server which you defined in the previous step.
+  * `const IPADDRESS` is the ip address of the Raspberry Pi.
+  * `const PORT` is the port of the backend server which you defined in the previous step.
 6. Build the client: `cd client` then `npm run build`.
-1. Allow the port for the client: `sudo ufw allow 80`.
-2. Allow the port for the server: `sudo ufw allow 5000`.
-7. Launch the App from the root directory with `npm run prod`.
+1. OPTIONAL: Install a software firewall called UFW: `sudo apt install ufw`. And enable UFW: `sudo ufw enable`.
+  * Allow the port for the client: `sudo ufw allow 80`.
+  * Allow the port for the server: `sudo ufw allow 5000`.
+  * Allow the port for MQTT: `sudo ufw allow 1883`.
+  * Allow the port for SSH: `sudo ufw allow 22`.
+7. Launch the App from the root directory with `sudo npm run prod`.
 8. Test your server by going opening the ip address of the Raspberry Pi in a browser.
 
 # Frontend Client
