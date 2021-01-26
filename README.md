@@ -28,14 +28,24 @@ MCutie provides a web client and API to log and chart MQTT sensor data.
 MCutie should run concurrently with an MQTT broker such as mosquitto.
 
 ## Deploying on a Raspberry Pi
+1. Update your Pi: `sudo apt update && sudo apt upgrade`
+2. Install Node and npm: `sudo apt-get install nodejs npm`
+5. Install sqlite3: `sudo apt install sqlite3`.
+3. Set up an MQTT broker like mosquitto: `sudo apt install mosquitto`.
+    * You should [enable passwords and users](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-ubuntu-16-04) for more security although on a local network this may not be necessary.
+    * The default port for MQTT is 1883.
+1. Clone this repository: `git clone https://github.com/ec965/MCutie.git`
+4. Install the packages for the client, backend and root: `npm run init`
+5. Change `./client/.env` to reflect the credentials of the client server.
+    * The default port for HTTP is 80.
+4. Change `./backend/.env` to reflect the credentials of the broker and backend server.
+    * I'm using port 5000 for development but any unreserved port is OK.
+5. Change `./client/src/util.js` to reflect credentials of the Raspberry Pi and API server.
+    * `const IPADDRESS` is the ip address of the Raspberry Pi.
+    * `const PORT` is the ip address of the backend server which you defined in the previous step.
+6. Build the client: `cd client` then `npm run build`.
 1. Allow the port for the client: `sudo ufw allow 80`.
 2. Allow the port for the server: `sudo ufw allow 5000`.
-3. Set up the MQTT broker `sudo apt install mosquitto`.
-    * You should [enable passwords and users](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-ubuntu-16-04).
-4. Change `./backend/.env` to reflect the credentials of the broker.
-5. Install sqlite3: `sudo apt-get install sqlite3`.
-5. Change `./client/src/util.js` to reflect credentials of the Raspberry Pi.
-6. Rebuild the client: `cd client` then `npm run build`.
 7. Launch the App from the root directory with `npm run prod`.
 8. You should be able to see the App running on the local network from the IP address of your Raspberry Pi.
 
