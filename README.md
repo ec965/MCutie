@@ -27,6 +27,13 @@
 MCutie provides a web client and API to log and chart MQTT sensor data.
 MCutie should run concurrently with an MQTT broker such as mosquitto.
 
+MCutie is meant to be deployed on a home network. 
+
+There is also a [cloud based demo](https://m-cutie.herokuapp.com/) with [subtle differences in implmentation](https://github.com/ec965/MCutie-demo).
+
+# [DEMO](https://m-cutie.herokuapp.com/)
+
+
 ## Deploying on a Raspberry Pi
 1. Update your Raspberry Pi: `sudo apt update && sudo apt upgrade`
 2. Install Node and npm: `sudo apt install nodejs npm`
