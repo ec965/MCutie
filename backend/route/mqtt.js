@@ -146,6 +146,9 @@ router.post("/s", (req, res) => {
 // if error deleting item from db: 500 
 router.delete("/s", (req, res) => {
   if (typeof req.body.topic !== "undefined"){
+    req.body.topic = req.body.topic.trim();
+    if (req.body.topic === '') return res.status(400).json({message: 'cannot subscribe to that topic'});
+
     db.Sub.findAll({
       where:{topic: req.body.topic}
     })

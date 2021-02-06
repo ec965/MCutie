@@ -150,6 +150,10 @@ const checkTopicExist = async (msgjson) => {
 */
 const publish = (msgjson) => {
   if (typeof msgjson.payload.topic !== "undefined" && typeof msgjson.payload.message !== "undefined"){
+    msgjson.payload.topic = msgjson.payload.topic.trim();
+    if (msgjson.payload.topic === ''){
+      return;
+    }
     let qos=0;
     if (typeof msgjson.payload.qos !== "undefined"){
       let qosint = parseInt(msgjson.qos);

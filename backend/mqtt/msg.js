@@ -35,6 +35,13 @@ const onMessage = async (topic, message) => {
   mqttEmitter.emit('MQTTRX'); // notify the websocket that a new message has been added to the db
 }
 
+function isInt(n){
+    return Number(n) === n && n % 1 === 0;
+}
+
+function isFloat(n){
+    return Number(n) === n && n % 1 !== 0;
+}
 
 // check data to see if it meets the criteria for pushing to DB
 // return true is data is OK
@@ -45,21 +52,26 @@ const onMessage = async (topic, message) => {
 const checkDataResolution = (last, current, float_resolution, int_resolution) => {
   // check values if they are floats
   // if data is smaller than the resolution, don't add it
-  last_float = parseFloat(last);
-  current_float = parseFloat(current);
-  if (last_float % 1 > 0 || current_float % 1 > 0){
-    if (Math.abs(last_float - current_float) <= float_resolution) {
+  // check values if they are ints
+  // then check if the ints are too close based on IntResolution
+  last = parseFloat(last);
+  current = parseFloat(current);
+  if (isNaN(last) || isNaN(current)) return true;
+
+  if (isFloat(last) || isFloat(current)){
+    if (last % 1 > 0 || current % 1 > 0){
+      if (Math.abs(last - current) <= float_resolution) {
+        return false;
+      }
+    }
+  } else {
+    if (Math.abs(last - current) <= int_resolution) {
       return false;
     }
   }
-  // check values if they are ints
-  // then check if the ints are too close based on IntResolution
-  last_int = parseInt(last);
-  current_int = parseInt(current);
-  if (Math.abs(last_int - current_int) <= int_resolution) {
-    return false;
-  }
+
   return true;
 }
+
 
 module.exports = onMessage;
