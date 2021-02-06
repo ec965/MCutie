@@ -95,11 +95,15 @@ A sample .env file has been included in the `backend/` folder.
 * `MQTT_BROKER`: mqtt broker, this app is intended to be run on the same machine as your broker.
 * `MQTT_CLIENTID`: mqtt client id, pick something unique
 * `MQTT_USERNAME/MQTT_PASSWORD`: if you have certification set up on your mqtt broker, put your username/password here.
-* `MQTT_FLOAT_RES`: For floating point incoming data, checks the data against the rule: (PreviousData - CurrentData > FloatResoltuion) ? addToDataBase : dontAddToDataBase
-* `MQTT_INT_RES`: For integer incoming data, checks the data against the rule: (PreviousData - CurrentData > IntResoltuion) ? addToDataBase : dontAddToDataBase
+* `MQTT_FLOAT_RES`: Controls Float resolution (see below).
+* `MQTT_INT_RES`: Controls Int Resolution (see below).
 * `LOGLEVEL`: log level, most stuff is on debug, anything breaking will be on info and below.
 * `PORT`: port to run the backend server on. This should align with the port listed in `client/src/util.js`.
 * `IPADDRESS`: Ip address of the device running the server. You can get this on Linux using `ifconfig` and Windows using `ipconfig`.
+
+### Float Resolution and Int Resolution
+* For floating point incoming data, checks the data against the rule: (PreviousData - CurrentData > FloatResoltuion) ? addToDataBase : dontAddToDataBase
+* For integer incoming data, checks the data against the rule: (PreviousData - CurrentData > IntResoltuion) ? addToDataBase : dontAddToDataBase
 
 # Server API Reference
 ## `GET`
